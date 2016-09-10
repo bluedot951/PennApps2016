@@ -40,38 +40,6 @@ app = Flask(__name__)
 api = Api(app)
 
 
-
-# def get(todo_id):
-#     """
-#     Get all placed orders
-#     :param todo_id:
-#     :return:
-#     """
-#     return {}
-#
-# def put(id, num, type):
-#     """
-#     Place a new Buying order
-#     :param order:
-#     :return:
-#     """
-#     order = {}
-#
-#
-#     return {}
-
-# class Sell(Resource):
-#     """
-#     Sell Api
-#     """
-#     def put(user, vol, price, ticker, isBuy, isMarket):
-#         """
-#         Creates a new order and enqueues it in the priority queue
-#         :param order:
-#         :return:
-#         """
-#         return
-
 @app.route('/entity/', methods=['GET'])
 def get_entities():
     """
@@ -108,9 +76,43 @@ def get_ledgers():
 @app.route('/price_history/<string:ticker>', methods=['GET'])
 def get_price_history(ticker):
     cursor.execute(
-        'SELECT * FROM "%sPriceHistory"' % ticker
+        'SELECT * FROM "%s_price_history"' % ticker
     )
     return jsonify(cursor.fetchall())
+
+@app.route('/price_history/<string:ticker>', methods=['POST'])
+def buy()
+# def get(todo_id):
+#     """
+#     Get all placed orders
+#     :param todo_id:
+#     :return:
+#     """
+#     return {}
+#
+# def put(id, num, type):
+#     """
+#     Place a new Buying order
+#     :param order:
+#     :return:
+#     """
+#     order = {}
+#
+#
+#     return {}
+
+# class Sell(Resource):
+#     """
+#     Sell Api
+#     """
+#     def put(user, vol, price, ticker, isBuy, isMarket):
+#         """
+#         Creates a new order and enqueues it in the priority queue
+#         :param order:
+#         :return:
+#         """
+#         return
+
 
 if __name__ == '__main__':
     app.run(debug=True)
