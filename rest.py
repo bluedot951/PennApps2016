@@ -17,12 +17,10 @@ Display Information
 
 
 """
-# import models
-# from models import db
-from flask import Flask
+
+from flask import Flask, abort, jsonify
 from flask_restful import Resource, Api
-from requests import put, get
-import os
+
 import psycopg2
 import urlparse
 
@@ -41,34 +39,32 @@ cursor = conn.cursor()
 app = Flask(__name__)
 api = Api(app)
 
-# class Buy(Resource):
+
+
+# def get(todo_id):
 #     """
-#     Buy Api to place an order
+#     Get all placed orders
+#     :param todo_id:
+#     :return:
 #     """
-#     def get(self, todo_id):
-#         """
-#         Get all placed orders
-#         :param todo_id:
-#         :return:
-#         """
-#         return {}
+#     return {}
 #
-#     def put(self, id, num, type):
-#         """
-#         Place a new Buying order
-#         :param order:
-#         :return:
-#         """
-#         order = {}
+# def put(id, num, type):
+#     """
+#     Place a new Buying order
+#     :param order:
+#     :return:
+#     """
+#     order = {}
 #
 #
-#         return {}
-#
+#     return {}
+
 # class Sell(Resource):
 #     """
 #     Sell Api
 #     """
-#     def put(self, user, vol, price, ticker, isBuy, isMarket):
+#     def put(user, vol, price, ticker, isBuy, isMarket):
 #         """
 #         Creates a new order and enqueues it in the priority queue
 #         :param order:
@@ -76,50 +72,45 @@ api = Api(app)
 #         """
 #         return
 
-class Entity(Resource):
-    def get(self):
-        """
-        :return: All Users
-        """
-        cursor.execute(
-            'SELECT * FROM "entity"'
-        )
-        return cursor.fetchall()
+@app.route('/entity/', methods=['GET'])
+def get_entities():
+    """
+    :return: All Users
+    """
+    cursor.execute(
+        'SELECT * FROM "entity"'
+    )
+    result = cursor.fetchall()
+    return jsonify(result)
 
-class Inventory(Resource):
-    def get(self, userid):
-        cursor.execute(
-            'SELECT * FROM "inventory" WHERE "userid" = %s' % userid
-        )
-        return cursor.fetchall()
+@app.route('/inventory/<int:user_id>', methods=['GET'])
+def get_inventory(user_id):
+    cursor.execute(
+        'SELECT * FROM "inventory" WHERE "userid" = %s' % user_id
+    )
+    return jsonify(cursor.fetchall())
 
-class Order(Resource):
-    def get(self):
-        cursor.execute(
-            'SELECT * FROM "order"'
-        )
-        return cursor.fetchall()
+@app.route('/order/', methods=['GET'])
+def get_orders():
+    cursor.execute(
+        'SELECT * FROM "order"'
+    )
+    return jsonify(cursor.fetchall())
 
-class Ledger(Resource):
-    def get(self):
-        cursor.execute(
-            'SELECT * FROM "ledger"'
-        )
-        return cursor.fetchall()
+@app.route('/ledger/', methods=['GET'])
+def get_ledgers():
+    cursor.execute(
+        'SELECT * FROM "ledger"'
+    )
+    return jsonify(cursor.fetchall())
 
-class PriceHistory(Resource):
-    def get(self, ticker):
-        cursor.execute(
-            'SELECT * FROM "%sPriceHistory"' % ticker
-        )
-        return cursor.fetchall()
 
-# api.add_resource(Buy, '/buy')
-api.add_resource(Entity, '/entity')
-api.add_resource(Inventory, '/inventory/<string:userid>')
-api.add_resource(Order, '/order')
-api.add_resource(Ledger, '/ledger')
-
+@app.route('/price_history/<string:ticker>', methods=['GET'])
+def get_price_history(ticker):
+    cursor.execute(
+        'SELECT * FROM "%sPriceHistory"' % ticker
+    )
+    return jsonify(cursor.fetchall())
 
 if __name__ == '__main__':
     app.run(debug=True)
