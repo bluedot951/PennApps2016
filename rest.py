@@ -23,6 +23,7 @@ from flask_restful import Resource, Api
 
 import psycopg2
 import urlparse
+from custom_json_encoder import CustomJsonEncoder
 
 urlparse.uses_netloc.append("postgres")
 url = urlparse.urlparse('postgres://gxspomxmufoybd:dskomEuwa9JYaxf8Jd7h8JYVKo@ec2-54-221-253-117.compute-1.amazonaws.com:5432/d62ndf8grb25cb')
@@ -37,6 +38,7 @@ conn = psycopg2.connect(
 cursor = conn.cursor()
 
 app = Flask(__name__, static_url_path='')
+app.json_encoder = CustomJsonEncoder
 api = Api(app)
 
 
@@ -73,11 +75,13 @@ def get_ledgers():
     return jsonify(cursor.fetchall())
 
 
+
 @app.route('/price_history/<string:ticker>', methods=['GET'])
 def get_price_history(ticker):
     cursor.execute(
         'SELECT * FROM "%s_price_history"' % ticker
     )
+    # print cursor.fetchall()
     return jsonify(cursor.fetchall())
 
 @app.route('/buy/', methods=['POST'])
