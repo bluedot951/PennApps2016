@@ -25,6 +25,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="search-bar.html">
 <link rel="import" href="info-card.html">
 <link rel="import" href="place-order.html">
+<link rel="import" href="my-account.html">
 <link rel="import" href="../bower_components/chart-elements/chart-line.html">
 
 <dom-module id="my-app">
@@ -71,8 +72,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       }
 
       .drawer-list a.iron-selected {
-        color: black;
-
         font-weight: bold;
       }
 
@@ -102,7 +101,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <app-drawer-layout fullbleed>
       <!-- Drawer content -->
       <app-drawer>
-        <app-toolbar>Menu</app-toolbar>
+        <my-account name="John Doe" balance="207.24"></my-account>
         <iron-selector selected="[[page]]" attr-for-selected="name" class="drawer-list" role="navigation">
           <a name="view1" href="/view1">View One</a>
           <a name="view2" href="/view2">View Two</a>

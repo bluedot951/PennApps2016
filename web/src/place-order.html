@@ -1,6 +1,7 @@
 <link rel="import" href="../bower_components/polymer/polymer.html">
 <link rel="import" href="../bower_components/paper-input/paper-input.html">
 <link rel="import" href="../bower_components/paper-radio-group/paper-radio-group.html">
+<link rel="import" href="../bower_components/paper-material/paper-material.html">
 
 
 <dom-module id="place-order">
@@ -10,31 +11,64 @@
 				--paper-input-container-color: var(--app-text-color);
 				--paper-input-container-focus-color: var(--app-primary-color);
 			}
+			paper-radio-group {
+				display: block;
+				margin: auto;
+				padding: 20px;
+			}
 			.container {
-				padding-top: 10%;
+				padding: 40px 0;
 				width: 80%;
 				display: block;
 				margin: auto;
 			}
 			.text {
 				color: var(--app-text-color);
-				font-weight: 400;
+				font-weight: 300;
+				font-size: 1.2em;
 				margin: 0;
+				padding: 0;
+			}
+
+			.button {
+				flex: 1;
+				background-color: #fff;
+				color: var(--app-text-color);
+				font-weight: 300;
+				text-align: center;
+				display: inline-block;
+				padding: 5px 30px;
+				max-width: 50px;
+				margin: 0 3%;
+			}
+
+			.row {
+				display: flex;
+
 			}
 		</style>
 
 		<div class="container">
 			<h4 class="text">Place Order: </h4>
 
-			<div class="row">
+
 				<paper-input placeholder="Amount"></paper-input>
 
-				<paper-radio-group selected="b" allow-empty-selection aria-labelledby="label3">
-				  <paper-radio-button name="a">allosaurus</paper-radio-button>
-				  <paper-radio-button name="b">brontosaurus</paper-radio-button>
-				  <paper-radio-button name="d" disabled>diplodocus</paper-radio-button>
+				<paper-radio-group selected="a" aria-labelledby="Market/Limit">
+				  <paper-radio-button name="a">Market</paper-radio-button>
+				  <paper-radio-button name="b">Limit</paper-radio-button>
 				</paper-radio-group>
-			</div>
+
+				<div class="row">
+					<paper-material elevation="1" class="button">
+						Buy
+					</paper-material>
+
+					<paper-material elevation="1" class="button">
+						Sell
+					</paper-material>	
+				</div>
+
 		</div>
 
 	</template>
