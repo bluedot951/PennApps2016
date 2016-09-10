@@ -1,81 +1,75 @@
 import requests
 import json
-# nessie API key: b5f9af5da4a243e5e82982193e355b7f
-url = 'something'
-response = requests.get(url)
+import datetime
+
+nessie_key = 'b5f9af5da4a243e5e82982193e355b7f'
+url = 'something endpoint'
+response = requests.get('http://api.reimaginebanking.com/accounts/57d40aeee63c5995587e864f/customer?key={api}'.format(api =nessie_key ))
+response2 = requests.get(url)
+retval = json.loads(response2.text)
 print(response)
+print(response2)
+
+#retval is python dictionary
+
+# Central Inventory/Pool is a dict of ticker: amount
+centralinv = {}
+
+
+# GL is a list of listof(class order, tstamp)
+GL = []
+
+# PQ is a list of listof(class order, tstamp)
+PQ = []
 
 # User
 
-class user():
+class user:
     def __init__(self, balance, inventory):
         self.b = balance
         self.inv = inventory
 
     def changeinv(self, sym, vol):
-        self.inventory[sym] += vol
+        if self.inv[sym]:
+            self.inv[sym] += vol
+        else:
+            self.inv[sym] = vol
+
+
 u = user(10.00, {})
 u.changeinv('GTHB', 10)
-print(u.inventory['GTHB'])
+print(u.inv['GTHB'])
+
 
 # Order
 class order:
-    def __init__(self, ticker, side, vol, price, ordertype):
+    def __init__(self, ID, ticker, side, vol, price, ordertype, tstamp):
+        self.id = ID
         self.t = ticker
         self.s = side
         self.v = vol
         self.p = price
         self.ot = ordertype
-
-# Central Inventory/Pool
-class cinv:
-    inv = []
-    def changecinv(self, x):
-        self.inv.append(x)
-
-# General ledger
-class GL:
-    def __init__(self, oid, tstamp):
-        self.oid = oid
-        self.t = tstamp
-
-    def addGLentry(self, id, stamp):
-        self.oid.append(id)
-        self.t.append(stamp)
-
-# Priority Queue
-class PQ:
-    def __init__(self, poid, tstamp, gl):
-        self.poid = poid
-        self.tstamp = tstamp
-        self.gl = gl
-    def addPQentry(self, x, y):
-        self.poid.insert(0, x)
-        self.tstamp.insert(0, y)
-    def removePQentry(self):
-        gl.addGLentry(self.id[0], self.tstamp[0])
-        self.id = self.id[1:]
-        self.tstamp = self.tstamp[1:]
-
-gl = GL()
-pq = PQ(gl)
+        self.ts = tstamp
 
 
-def execution(orderID, pool):
-    #conditions for execution to be true
-    if centralinv(orderID.t) != NULL:
-        # do something
-    else:
-        return False
-    return True
+def addglentry(o):
+    GL.append([o])
 
-def addtoGL(aGL):
-    if execution(orderID) == True:
-        # blah blah blah
-    elif execution(orderID) == False:
-        #return order to PQ
+def addpqentry(o):
+    PQ.append([o])
+
+def removepqentry(o):
+    addglentry(o)
+    PQ.pop([o])
+
+# o is of class order
+def execution(o):
+    if o.ot == "market" & o.s == "buy":
+        addglentry(o)
 
 
+PQ.sort(key=lambda entry: entry[1])
 #The price of any stock at any moment is determined by finding the price at which  the maximum number of shares will be transacted.
 
 
