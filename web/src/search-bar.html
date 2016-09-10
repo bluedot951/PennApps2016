@@ -1,0 +1,30 @@
+<link rel="import" href="../bower_components/polymer/polymer.html">
+
+<dom-module id="search-bar">
+	<template>
+		<style>
+			:host {
+				display: block;
+				margin: auto;
+				width: 80%;
+				border: 2px solid var(--app-text-color);
+				padding: 10px;
+			}
+
+			.search-string {
+				margin: 0;
+				padding: 0;
+				color: var(--app-text-color);
+			}
+		</style>
+
+			<h5 class='search-string'>Search Stickers...</h5>
+
+	</template>
+
+	<script>
+    	Polymer({
+      		is: 'search-bar'
+    	});
+  	</script>
+<dom-module/>

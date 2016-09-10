@@ -1,0 +1,188 @@
+<!--
+@license
+Copyright (c) 2016 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/app-layout/app-drawer/app-drawer.html">
+<link rel="import" href="../bower_components/app-layout/app-drawer-layout/app-drawer-layout.html">
+<link rel="import" href="../bower_components/app-layout/app-header/app-header.html">
+<link rel="import" href="../bower_components/app-layout/app-header-layout/app-header-layout.html">
+<link rel="import" href="../bower_components/app-layout/app-scroll-effects/app-scroll-effects.html">
+<link rel="import" href="../bower_components/app-layout/app-toolbar/app-toolbar.html">
+<link rel="import" href="../bower_components/app-route/app-location.html">
+<link rel="import" href="../bower_components/app-route/app-route.html">
+<link rel="import" href="../bower_components/iron-pages/iron-pages.html">
+<link rel="import" href="../bower_components/iron-selector/iron-selector.html">
+<link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../bower_components/paper-material/paper-material.html">
+<link rel="import" href="my-icons.html">
+<link rel="import" href="search-bar.html">
+<link rel="import" href="info-card.html">
+<link rel="import" href="place-order.html">
+<link rel="import" href="../bower_components/chart-elements/chart-line.html">
+
+<dom-module id="my-app">
+  <template>
+    <style>
+      :host {
+        --app-primary-color: #171D43;
+        --app-secondary-color: #f5f5f5;
+        --app-highlight-color: #f44336;
+        --app-text-color: #b1b1b1;
+
+      }
+
+      app-header {
+        color: var(--app-text-color);
+      }
+      app-header paper-icon-button {
+        --paper-icon-button-ink-color: white;
+      }
+
+      app-drawer {
+        display: flex;
+        flex-flow: row nowrap;
+        justify-content: space-between;
+        --app-drawer-content-container: {
+          background-color: var(--app-primary-color);
+        }
+      }
+
+      .drawer-list {
+        margin: 0 20px;
+      }
+
+      .drawer-list a {
+        display: block;
+
+        padding: 0 16px;
+
+        text-decoration: none;
+
+        color: var(--app-secondary-color);
+
+        line-height: 40px;
+      }
+
+      .drawer-list a.iron-selected {
+        color: black;
+
+        font-weight: bold;
+      }
+
+      .chart-base {
+        width: 80%;
+
+        display: block;
+        margin: auto;
+        margin-top: 10%;
+        background-color: #fff;
+      }
+
+      .chart {
+        display: block;
+        padding: 10px;
+
+      }
+    </style>
+
+    <app-location route="{{route}}"></app-location>
+    <app-route
+        route="{{route}}"
+        pattern="/:page"
+        data="{{routeData}}"
+        tail="{{subroute}}"></app-route>
+
+    <app-drawer-layout fullbleed>
+      <!-- Drawer content -->
+      <app-drawer>
+        <app-toolbar>Menu</app-toolbar>
+        <iron-selector selected="[[page]]" attr-for-selected="name" class="drawer-list" role="navigation">
+          <a name="view1" href="/view1">View One</a>
+          <a name="view2" href="/view2">View Two</a>
+          <a name="view3" href="/view3">View Three</a>
+        </iron-selector>
+      </app-drawer>
+
+      <!-- Main content -->
+      <app-header-layout has-scrolling-region>
+
+        <app-header condenses reveals effects="waterfall">
+          <app-toolbar>
+            <paper-icon-button icon="menu" drawer-toggle></paper-icon-button>
+ 
+          </app-toolbar>
+        </app-header>
+
+        <search-bar></search-bar>
+
+        <info-card name="GTHB" value="0.36" increasing percentage="0.02"></info-card>
+
+        <paper-material class="chart-base" elevation="2">
+          <chart-line data="{{data}}" class="chart"></chart-line>
+        </paper-material> 
+        
+        <place-order></place-order>
+        
+      </app-header-layout>
+    </app-drawer-layout>
+  </template>
+
+  <script>
+    Polymer({
+      is: 'my-app',
+
+      properties: {
+        page: {
+          type: String,
+          reflectToAttribute: true,
+          observer: '_pageChanged'
+        }
+      },
+
+      observers: [
+        '_routePageChanged(routeData.page)'
+      ],
+
+      _routePageChanged: function(page) {
+        this.page = page || 'view1';
+      },
+
+      _pageChanged: function(page) {
+        // Load page import on demand. Show 404 page if fails
+        var resolvedPageUrl = this.resolveUrl('my-' + page + '.html');
+        this.importHref(resolvedPageUrl, null, this._showPage404, true);
+      },
+
+      _showPage404: function() {
+        this.page = 'view404';
+      },
+      ready: function() {
+      this.data = {
+          labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun"],
+          datasets: [
+            {
+              label: "Value over Time",
+              lineTension: 0,
+              backgroundColor: "rgba(151,187,205,0.2)",
+              borderColor: "rgba(151,187,205,1)",
+              borderWidth: 1,
+              pointBackgroundColor: "rgba(151,187,205,1)",
+              pointBorderColor: "#fff",
+              pointHighlightFill: "#fff",
+              pointHoverBorderColor: "rgba(151,187,205,1)",
+              data: [28, 48, 40, 19, 86, 27],
+            }
+          ]
+        };
+      }
+    });
+    
+  </script>
+</dom-module>

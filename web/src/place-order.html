@@ -1,0 +1,47 @@
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../bower_components/paper-radio-group/paper-radio-group.html">
+
+
+<dom-module id="place-order">
+	<template>
+		<style>
+			:host {
+				--paper-input-container-color: var(--app-text-color);
+				--paper-input-container-focus-color: var(--app-primary-color);
+			}
+			.container {
+				padding-top: 10%;
+				width: 80%;
+				display: block;
+				margin: auto;
+			}
+			.text {
+				color: var(--app-text-color);
+				font-weight: 400;
+				margin: 0;
+			}
+		</style>
+
+		<div class="container">
+			<h4 class="text">Place Order: </h4>
+
+			<div class="row">
+				<paper-input placeholder="Amount"></paper-input>
+
+				<paper-radio-group selected="b" allow-empty-selection aria-labelledby="label3">
+				  <paper-radio-button name="a">allosaurus</paper-radio-button>
+				  <paper-radio-button name="b">brontosaurus</paper-radio-button>
+				  <paper-radio-button name="d" disabled>diplodocus</paper-radio-button>
+				</paper-radio-group>
+			</div>
+		</div>
+
+	</template>
+
+	<script>
+    	Polymer({
+      		is: 'place-order'
+    	});
+  	</script>
+<dom-module/>
