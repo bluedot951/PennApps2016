@@ -1,0 +1,8 @@
+API Key: 3a0f0fa4ae6f43cc9f70854d69e0f78f
+
+CustomerA: 57d40aeee63c5995587e864f (Bob Smith)
+	Checking Account: 57d40d4ee63c5995587e8651
+CustomerB: 57d40e71e63c5995587e8652 (Sally Jones)
+	Checking Account: 57d40f52e63c5995587e8653
+CustomerC: 57d410abe63c5995587e8655 (HTSE)
+	Checking Account: 57d410d8e63c5995587e8657
