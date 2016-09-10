@@ -47,14 +47,25 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       }
 
       app-drawer {
-        display: flex;
-        flex-flow: row nowrap;
-        justify-content: space-between;
+
         --app-drawer-content-container: {
           background-color: var(--app-primary-color);
+          display: flex;
+          flex-flow: column nowrap;
+          justify-content: center;
+          color: #fff;
         }
       }
 
+      .inventory {
+        display: inline-block;
+        padding-bottom: 5px;
+
+        margin: 0 20px;
+        margin-bottom: 20px;
+        border-bottom: 3px solid var(--app-highlight-color);
+        font-size: 1.4em;
+      }
       .drawer-list {
         margin: 0 20px;
       }
@@ -89,6 +100,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         padding: 10px;
 
       }
+
+      .sticker {
+        width: 80%;
+        display: block;
+        margin: auto;
+        font-weight: 300;
+      }
     </style>
 
     <app-location route="{{route}}"></app-location>
@@ -102,20 +120,22 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       <!-- Drawer content -->
       <app-drawer>
         <my-account name="John Doe" balance="207.24"></my-account>
-        <iron-selector selected="[[page]]" attr-for-selected="name" class="drawer-list" role="navigation">
-          <a name="view1" href="/view1">View One</a>
-          <a name="view2" href="/view2">View Two</a>
-          <a name="view3" href="/view3">View Three</a>
+        <div class="inventory">
+          Inventory
+        </div>
+        <iron-selector selected="{{page}}" attr-for-selected="name" class="drawer-list" role="navigation">
+              <h3 name="GTHB" class="sticker">GTHB</h3>
+              <h3 name="GOOG" class="sticker">GOOG</h3>
+              <h3 name="PENN" class="sticker">PENN</h2>
         </iron-selector>
       </app-drawer>
 
       <!-- Main content -->
       <app-header-layout has-scrolling-region>
 
-        <app-header condenses reveals effects="waterfall">
+        <app-header condenses reveals>
           <app-toolbar>
             <paper-icon-button icon="menu" drawer-toggle></paper-icon-button>
- 
           </app-toolbar>
         </app-header>
 
@@ -141,27 +161,16 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         page: {
           type: String,
           reflectToAttribute: true,
-          observer: '_pageChanged'
+          observer: '_routePageChanged'
         }
       },
 
-      observers: [
-        '_routePageChanged(routeData.page)'
-      ],
-
       _routePageChanged: function(page) {
-        this.page = page || 'view1';
+        console.log(page)
+        this.page = page || '';
       },
 
-      _pageChanged: function(page) {
-        // Load page import on demand. Show 404 page if fails
-        var resolvedPageUrl = this.resolveUrl('my-' + page + '.html');
-        this.importHref(resolvedPageUrl, null, this._showPage404, true);
-      },
 
-      _showPage404: function() {
-        this.page = 'view404';
-      },
       ready: function() {
       this.data = {
           labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun"],
