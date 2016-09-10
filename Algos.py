@@ -1,11 +1,7 @@
 import requests
 import json
-import rest
-
 # nessie API key: b5f9af5da4a243e5e82982193e355b7f
-
-
-url = 'postgres://gxspomxmufoybd:dskomEuwa9JYaxf8Jd7h8JYVKo@ec2-54-221-253-117.compute-1.amazonaws.com:5432/d62ndf8grb25cb'
+url = 'something'
 response = requests.get(url)
 print(response)
 
@@ -18,7 +14,7 @@ class user():
 
     def changeinv(self, sym, vol):
         self.inventory[sym] += vol
-u = user(10.00)
+u = user(10.00, {})
 u.changeinv('GTHB', 10)
 print(u.inventory['GTHB'])
 
@@ -30,13 +26,6 @@ class order:
         self.v = vol
         self.p = price
         self.ot = ordertype
-
-    def match(self):
-        if self.ot == "market":
-            #look inside the database for an immediate match
-        elif self.ot == "limit":
-            #limit order logic
-        return matchresult
 
 # Central Inventory/Pool
 class cinv:
@@ -74,6 +63,10 @@ pq = PQ(gl)
 
 def execution(orderID, pool):
     #conditions for execution to be true
+    if centralinv(orderID.t) != NULL:
+        # do something
+    else:
+        return False
     return True
 
 def addtoGL(aGL):
@@ -81,6 +74,7 @@ def addtoGL(aGL):
         # blah blah blah
     elif execution(orderID) == False:
         #return order to PQ
+
 
 #The price of any stock at any moment is determined by finding the price at which  the maximum number of shares will be transacted.
 
