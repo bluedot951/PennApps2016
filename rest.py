@@ -18,7 +18,7 @@ Display Information
 
 """
 
-from flask import Flask, abort, jsonify
+from flask import Flask, abort, jsonify, request, send_from_directory, render_template
 from flask_restful import Resource, Api
 
 import psycopg2
@@ -36,7 +36,7 @@ conn = psycopg2.connect(
 )
 cursor = conn.cursor()
 
-app = Flask(__name__)
+app = Flask(__name__, static_url_path='')
 api = Api(app)
 
 
@@ -80,38 +80,39 @@ def get_price_history(ticker):
     )
     return jsonify(cursor.fetchall())
 
-@app.route('/price_history/<string:ticker>', methods=['POST'])
-def buy()
-# def get(todo_id):
-#     """
-#     Get all placed orders
-#     :param todo_id:
-#     :return:
-#     """
-#     return {}
-#
-# def put(id, num, type):
-#     """
-#     Place a new Buying order
-#     :param order:
-#     :return:
-#     """
-#     order = {}
-#
-#
-#     return {}
+@app.route('/buy/', methods=['POST'])
+def buy():
+    if not request.json or 'vol' not in request.json \
+        or 'price' not in request.json or 'ticker' not in request.json \
+        or 'isBuy' not in request.json or 'isMarket' not in request.json:
+        abort(400)
+    val = request.json['val']
+    price = request.json['price']
+    ticker = request.json['ticker']
+    isBuy = request.json['isBuy']
+    isMarket = request.json['isMarket']
+    cursor.execute(
+        'INSERT INTO "order"(val, price, ticker, isBuy, isMarket) VALUES '
+        '( %s, %s, %s, %s, %s, %s)' % (val, price, ticker, isBuy, isMarket)
+    )
+    cursor.commit()
+    return []
 
-# class Sell(Resource):
-#     """
-#     Sell Api
-#     """
-#     def put(user, vol, price, ticker, isBuy, isMarket):
-#         """
-#         Creates a new order and enqueues it in the priority queue
-#         :param order:
-#         :return:
-#         """
-#         return
+@app.route('/src/<path:path>')
+def src(path):
+    print path
+    return send_from_directory('static/src', path)
+
+# @app.route('/<path:path>')
+# def static_proxy(path):
+#   # send_static_file will guess the correct MIME type
+#   return send_from_directory('static', path)
+
+# @app.route('/')
+# def root():
+#     return send_from_directory('static', 'index.html')
+
+    # return render_template('static/index.html')
 
 
 if __name__ == '__main__':
