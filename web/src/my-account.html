@@ -7,18 +7,24 @@
 	<template>
 		<style>
 			:host {
+				--iron-icon-height: 50px;
+    			--iron-icon-width: 50px;
 				border-left: 3px solid var(--app-highlight-color);
 				display: flex;
+				justify-content: center;
 				color: #fff;
 			}
 
 			iron-icon {
 				flex: 1;
 			}
+			.name_balance {
+				flex: 1;
+			}
 		</style>
 
 		<iron-icon icon="icons:account-circle"></iron-icon>
-		<div>
+		<div class="name_balance">
 			<div class="name">{{name}}</div>
 			<div class="balance">Balance: ${{balance}}</div>
 		</div>
