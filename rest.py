@@ -98,10 +98,10 @@ def buy():
     cursor.commit()
     return []
 
-@app.route('/src/<path:path>')
-def src(path):
-    print path
-    return send_from_directory('static/src', path)
+# @app.route('/src/<path:path>')
+# def src(path):
+#     print path
+#     return send_from_directory('static/src', path)
 
 # @app.route('/<path:path>')
 # def static_proxy(path):
