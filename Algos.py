@@ -1,6 +1,7 @@
 import requests
 import json
 import datetime
+import Transfers
 
 nessie_key = 'b5f9af5da4a243e5e82982193e355b7f'
 url = 'something endpoint'
@@ -10,17 +11,17 @@ retval = json.loads(response2.text)
 print(response)
 print(response2)
 
+
 #retval is python dictionary
 
 # Central Inventory/Pool is a dict of ticker: amount
 centralinv = {}
 
+# BPQ is a list of listof(class order, tstamp) - BUY orders only
+BPQ = []
 
-# GL is a list of listof(class order, tstamp)
-GL = []
-
-# PQ is a list of listof(class order, tstamp)
-PQ = []
+# SPQ is a list of listof(class, order, tstamp) - SELL orders only
+SPQ = []
 
 # User
 
@@ -43,7 +44,10 @@ print(u.inv['GTHB'])
 
 # Order
 class order:
-    def __init__(self, ID, ticker, side, vol, price, ordertype, tstamp):
+    def __init__(self, user, ID, ticker, side, vol, price, ordertype, tstamp):
+        # user = user ID
+        self.u = user
+        # ID = order ID
         self.id = ID
         self.t = ticker
         self.s = side
@@ -54,24 +58,45 @@ class order:
 
 
 def addglentry(o):
-    GL.append([o])
+    requests.post('heroku url', data = o, json = o)
 
-def addpqentry(o):
-    PQ.append([o])
-
-def removepqentry(o):
+def removepqentry(myPQ, o):
     addglentry(o)
-    PQ.pop([o])
+    myPQ.remove(o)
 
 # o is of class order
-def execution(o):
-    if o.ot == "market" & o.s == "buy":
-        addglentry(o)
+def execution(buyPQ, sellPQ):
+    for i in buyPQ[:]:
+        for j in sellPQ[:]:
+            if i.price >= j.price:
+                if i.vol > j.vol:
+                    transfer('to', '57d40d4ee63c5995587e8651', j.vol * j.price )
+                    transfer('from', HTSECheckingAccount, j.vol*j.price)
+                    i.vol -= j.vol
+                    removepqentry(sellPQ, j)
+                else:
+                    transfer('to', HTSECheckingAccount, i.vol * j.price)
+                    transfer('from' '57d40d4ee63c5995587e8651', i.vol * j.price)
+                    j.vol -= i.vol
+                    i.vol = 0
+                    removepqentry(buyPQ, i)
 
+def addBuyOrder(o, buyPQ):
+    price = o.p
+    ind  = 0
+    while (ind < len(buyPQ) and price >= buyPQ[ind]):
+        ind += 1
+    buyPQ[ind:ind] = [o]
 
-PQ.sort(key=lambda entry: entry[1])
-#The price of any stock at any moment is determined by finding the price at which  the maximum number of shares will be transacted.
+def addSellOrder(o, buyPQ):
+    price = o.p
+    ind = 0
+    while (ind < len(buyPQ) and price <= buyPQ[ind]):
+        ind += 1
+    buyPQ[ind:ind] = [o]
 
+BPQ.sort(key=lambda entry: (-entry.p, entry.ts))
+SPQ.sort(key=lambda entry: (entry.p, entry.ts))
 
 retval = #call functions, will be in the same data type/format as DB
 request.post('url', retval)
