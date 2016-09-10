@@ -8,12 +8,16 @@
 		<style>
 			:host {
 				border-left: 3px solid var(--app-highlight-color);
-				display: inline-block;
+				display: flex;
 				color: #fff;
+			}
+
+			iron-icon {
+				flex: 1;
 			}
 		</style>
 
-		<iron-icon icon="{{icon}}" class$={{iconClass}}></iron-icon>
+		<iron-icon icon="icons:account-circle"></iron-icon>
 		<div>
 			<div class="name">{{name}}</div>
 			<div class="balance">Balance: ${{balance}}</div>
