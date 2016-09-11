@@ -39,21 +39,21 @@ class User:
 
 # Order
 class Order:
-    def __init__(self):
-        pass
-    #
-    #
-    # def __init__(self, user, ID, ticker, side, vol, price, ismarket, tstamp):
-    #     # user = user ID
-    #     self.u = user
-    #     # ID = order ID
-    #     self.id = ID
-    #     self.t = ticker
-    #     self.s = side
-    #     self.v = vol
-    #     self.p = price
-    #     self.im = ismarket
-    #     self.ts = tstamp
+    # def __init__(self):
+    #     pass
+
+
+    def __init__(self, user, ID, ticker, side, vol, price, ismarket, tstamp):
+        # user = user ID
+        self.u = user
+        # ID = order ID
+        self.id = ID
+        self.t = ticker
+        self.s = side
+        self.v = vol
+        self.p = price
+        self.im = ismarket
+        self.ts = tstamp
 
 #retval is python dictionary
 def getData(pq, all_orders, ledger, new_order):
@@ -61,25 +61,28 @@ def getData(pq, all_orders, ledger, new_order):
     BPQ = []
     SPQ = []
 
-    o = Order()
+    if new_order[4]:
+        omg = "buy"
+    else:
+        omg = "sell"
+
+    o = Order(new_order[6], new_order[0], new_order[3], omg, new_order[2], new_order[1], new_order[5], time())
     print pq
     print all_orders
     print ledger
     print new_order
-    o.u = new_order[6]
-    o.id = new_order[0]
-    o.t = new_order[3]
-    o.v = new_order[2]
-    o.p = new_order[1]
-
-    o.im = new_order[5]
-    o.ts = time()
+    # o.u = new_order[6]
+    # o.id = new_order[0]
+    # o.t = new_order[3]
+    # o.v = new_order[2]
+    # o.p = new_order[1]
+    #
+    # o.im = new_order[5]
+    # o.ts = time()
 
     if new_order[4]:
-        o.s = "buy"
         BPQ.append(o)
     else:
-        o.s = "sell"
         SPQ.append(o)
 
 
