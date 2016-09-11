@@ -178,26 +178,34 @@ def orderCallback(vol, price, ticker, isBuy, isMarket, userId):
     print 'pq'
     print pq
 
-
     # call an algos.py function right here
     new_market_price, datetime_of_update = algos.getData(pq, old_orders, gl, new_order[0])
+    print 'new market price'
+    print new_market_price
 
-    # # update priority queue
-    # cursor.execute(
-    #     'INSERT INTO "priority_queue"(id, stamp, orderid) VALUES '
-    #     '( %s, %s, %s) ' % ('DEFAULT', 'now()', id)
-    # )
-    #
-    # # update price history
-    # cursor.execute(
-    #     'INSERT INTO "%s_price_history"(id, stamp, price) VALUES '
-    #     '( %s, %s, %s) ' % ('DEFAULT', 'now()', new_market_price)
-    # )
-    #
-    # # update user inventory
-    # if
-    #
-    # conn.commit()
+    print 'datetime of update'
+    print datetime_of_update
+    # update priority queue
+    cursor.execute(
+        'INSERT INTO "priority_queue"(id, stamp, orderid) VALUES '
+        '( %s, %s, %s) ' % ('DEFAULT', 'now()', id)
+    )
+
+    # update price history
+    cursor.execute(
+        'INSERT INTO "%s_price_history"(id, stamp, price) VALUES '
+        '( %s, %s, %s) ' % ('DEFAULT', 'now()', new_market_price)
+    )
+
+    # update user inventory
+    # if isBuy:
+    #     # increase user inventory, decrease from the central market
+    #     cursor.execute(
+    #         'UPDATE '
+    #     )
+
+
+    conn.commit()
 
     return jsonify({'status': 200, 'message': 'success :)'})
     # return jsonify({'new_market_price' : new_market_price, 'date_of_update': datetime_of_update})
