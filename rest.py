@@ -96,28 +96,15 @@ def buy():
     isBuy = request.json['isBuy']
     isMarket = request.json['isMarket']
     cursor.execute(
-        'INSERT INTO "order"(val, price, ticker, isBuy, isMarket) VALUES '
-        '( %s, %s, %s, %s, %s, %s)' % (val, price, ticker, isBuy, isMarket)
+        'INSERT INTO "order"(id, val, price, ticker, isBuy, isMarket) VALUES '
+        '(%s, %s, %s, %s, %s, %s, %s)' % ('DEFAULT', val, price, ticker, isBuy, isMarket)
     )
-    cursor.commit()
+    cursor.execute(
+        'INSERT INTO "priority_queue"(id, stamp, orderid) VALUES '
+        '( %s, %s, %s) ' % ('DEFAULT', 'now()', '')
+    )
+    conn.commit()
     return []
-
-# @app.route('/src/<path:path>')
-# def src(path):
-#     print path
-#     return send_from_directory('static/src', path)
-
-# @app.route('/<path:path>')
-# def static_proxy(path):
-#   # send_static_file will guess the correct MIME type
-#   return send_from_directory('static', path)
-
-# @app.route('/')
-# def root():
-#     return send_from_directory('static', 'index.html')
-
-    # return render_template('static/index.html')
-
 
 if __name__ == '__main__':
     app.run(debug=True)
