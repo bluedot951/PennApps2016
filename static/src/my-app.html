@@ -45,6 +45,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     handle-as="json"
     on-response="handleAccResponse"
     debounce-duration="300"></iron-ajax>
+
+    <iron-ajax
+    auto
+    url="/balance/"
+    handle-as="json"
+    on-response="handleBalanceResponse"
+    debounce-duration="300"></iron-ajax>
     <style>
       :host {
         --app-primary-color: #171D43;
@@ -180,6 +187,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   </template>
 
   <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('/service-worker.js');
+    }
     function interpolate(x) {
       var x0 = 512, y0 = 15;
       var x1 = 750, y1 = 30;
@@ -251,7 +261,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         var acc = rawData[0];
 
         this.name = acc[1];
-        this.balance = acc[2];
+      },
+      handleBalanceResponse: function(e, xhr) {
+
+        this.balance = xhr.response
       }
       // ready: function() {
 
