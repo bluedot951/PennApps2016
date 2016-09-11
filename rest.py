@@ -194,7 +194,7 @@ def orderCallback(vol, price, ticker, isBuy, isMarket, userId):
 
     # update priority queue
     cursor.execute(
-        'DELETE FROMg "priority_queue" *'
+        'DELETE FROM "priority_queue" *'
     )
     conn.commit()
     for order in new_pq:
