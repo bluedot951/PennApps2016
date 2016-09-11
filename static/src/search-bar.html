@@ -8,7 +8,7 @@
 				margin: auto;
 				width: 80%;
 				border: 2px solid var(--app-text-color);
-				padding: 10px;
+				padding: 5px 10px;
 			}
 			
 			 {
@@ -22,10 +22,18 @@
 				font-size: 1.2em;
 				color: var(--app-text-color);
 			}
+			input {
+				width: 100%;
+				background: none;
+				border: none;
+			}
+			input:focus {
+			    outline:none;
+			}
 		</style>
 		
-<!-- 		<input value="{{query::input}}"> -->
-		<h5 class='search-string'>Search Stickers...</h5>
+		<input value="{{query::input}}" placeholder="Search Stickers...">
+<!-- 		<h5 class='search-string'>Search Stickers...</h5> -->
 
 	</template>
 
