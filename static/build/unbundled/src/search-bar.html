@@ -1,0 +1,33 @@
+<html><head><link rel="import" href="../bower_components/polymer/polymer.html">
+
+</head><body><dom-module id="search-bar">
+	<template>
+		<style>
+			:host {
+				display: block;
+				margin: auto;
+				width: 80%;
+				border: 2px solid var(--app-text-color);
+				padding: 10px;
+			}
+			
+			 {
+				background: transparent;
+				border: none;
+			}
+			.search-string {
+				margin: 0;
+				padding: 0;
+				font-weight: 300;
+				font-size: 1.2em;
+				color: var(--app-text-color);
+			}
+		</style>
+		
+		<input value="{{query::input}}">
+		
+
+	</template>
+
+	<script>Polymer({is:"search-bar"});</script>
+<dom-module></dom-module></dom-module></body></html>

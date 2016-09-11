@@ -1,7 +1,10 @@
 {
-  "name": "polymer-starter-kit",
+  "name": "the-sticker-exchange",
   "authors": [
-    "The Polymer Authors"
+    "Timotius Sitorus",
+    "Joseph Zhong",
+    "Rosie Zhou",
+    "Shantanu Gore"
   ],
   "private": true,
   "dependencies": {
