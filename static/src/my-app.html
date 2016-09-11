@@ -52,6 +52,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     handle-as="json"
     on-response="handleBalanceResponse"
     debounce-duration="300"></iron-ajax>
+
+    <iron-ajax
+    auto
+    url="/inventory/1"
+    handle-as="json"
+    on-response="handleInventoryResponse"
+    debounce-duration="300"></iron-ajax>
     <style>
       :host {
         --app-primary-color: #171D43;
@@ -136,8 +143,17 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       .sticker {
         width: 80%;
         display: block;
-        margin: auto;
+        margin: 0 auto;
         font-weight: 300;
+      }
+
+      .count {
+        margin: 0 auto;
+      }
+
+      .row {
+        display: flex;
+
       }
     </style>
 
@@ -159,9 +175,17 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           Inventory
         </div>
         <iron-selector selected="{{sticker}}" attr-for-selected="name" class="drawer-list" role="navigation">
-              <h3 name="GTHB" class="sticker">GTHB</h3>
-              <h3 name="GOOG" class="sticker">GOOG</h3>
-              <h3 name="PENN" class="sticker">PENN</h2>
+
+
+          <template is="dom-repeat" items="{{inventory}}">
+            <div name="{{item[2]}}" class="row">
+                <h3  class="sticker">{{item[2]}}</h3>
+                <h3 class="count">{{item[3]}}</h3>
+            </div>
+          </template>
+
+<!--           <h3 name="GOOG" class="sticker">GOOG</h3>
+          <h3 name="PENN" class="sticker">PENN</h3> -->
         </iron-selector>
       </app-drawer>
 
@@ -180,7 +204,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           <chart-line data="{{data}}" class="chart"></chart-line>
         </paper-material> 
         
-        <place-order></place-order>
+        <place-order ticker="{{sticker}}"></place-order>
         
       </app-header-layout>
     </app-drawer-layout>
@@ -264,7 +288,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       handleBalanceResponse: function(e, xhr) {
         console.log(xhr.response);
         this.balance = xhr.response
-      }
+      },
+      handleInventoryResponse: function(e, xhr) {
+        console.log(xhr.response);
+        this.inventory = xhr.reponse;
+      } 
       // ready: function() {
 
       // this.data = {
