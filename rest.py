@@ -190,7 +190,7 @@ def orderCallback(vol, price, ticker, isBuy, isMarket, userId):
 
     # update priority queue
     cursor.execute(
-        'DELETE TABLE "priority_queue" *'
+        'DELETE FROM TABLE "priority_queue" *'
     )
     conn.commit()
     for order in new_pq:
@@ -201,7 +201,7 @@ def orderCallback(vol, price, ticker, isBuy, isMarket, userId):
 
     # update ledger
     cursor.execute(
-        'DELETE TABLE "ledger" *'
+        'DELETE FROM GTABLE "ledger" *'
     )
     conn.commit()
     for l in new_ledger:
@@ -221,10 +221,6 @@ def orderCallback(vol, price, ticker, isBuy, isMarket, userId):
     operation = '+' if isBuy else '-'
 
     # increase user inventory, decrease from the central market
-    cursor.execute(
-        'UPDATE "inventory" SET count = count %s %s WHERE userid = 2 AND ticker = \'%s\''
-        % (operation, vol, ticker)
-    )
     cursor.execute(
         'UPDATE "inventory" SET count = count %s %s WHERE userid = 2 AND ticker = \'%s\''
         % (operation, vol, ticker)
