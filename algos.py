@@ -56,15 +56,18 @@ class Order:
 
 #retval is python dictionary
 def getData(pq, all_orders, ledger, new_order):
-    
+
     BPQ = []
     SPQ = []
 
     o = Order()
-    print pq
-    print all_orders
-    print ledger
-    print new_order
+    # print 'pq'
+    # print pq
+    # print 'all orders'
+    # print all_orders
+    # print 'ledger'
+    # print ledger
+    # print new_order
     o.u = new_order[6]
     o.id = new_order[0]
     o.t = new_order[3]
@@ -83,6 +86,7 @@ def getData(pq, all_orders, ledger, new_order):
 
 
     for p in pq:
+        print 'p'
         print p
         orderID = p[2] # reverse lookup for side
         myOrder = None
@@ -100,8 +104,8 @@ def getData(pq, all_orders, ledger, new_order):
             SPQ.append(p)
 
 
-    BPQ.sort(key=lambda entry: (-entry.p, entry.ts))
-    SPQ.sort(key=lambda entry: (entry.p, entry.ts))
+    # BPQ.sort(key=lambda entry: (-entry.p, entry.ts))
+    # SPQ.sort(key=lambda entry: (entry.p, entry.ts))
     BPQ, SPQ, ledger = execution(BPQ, SPQ, ledger)
 
     pqToRet = BPQ
