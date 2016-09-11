@@ -1,0 +1,37 @@
+<html><head><link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/iron-icon/iron-icon.html">
+<link rel="import" href="../bower_components/iron-icons/iron-icons.html">
+
+
+</head><body><dom-module id="my-account">
+	<template>
+		<style>
+			:host {
+				--iron-icon-height: 50px;
+    			--iron-icon-width: 50px;
+				border-left: 5px solid var(--app-highlight-color);
+				display: flex;
+				justify-content: flex-start;
+				color: #fff;
+				margin-bottom: 10vh;
+
+			}
+
+			iron-icon {
+				flex: 2;
+			}
+			.name_balance {
+				flex: 4;
+			}
+		</style>
+
+		<iron-icon icon="icons:account-circle"></iron-icon>
+		<div class="name_balance">
+			<div class="name">{{name}}</div>
+			<div class="balance">Balance: ${{balance}}</div>
+		</div>
+
+	</template>
+
+	<script>Polymer({is:"my-account",properties:{name:{type:String},balance:{type:Number}}});</script>
+<dom-module></dom-module></dom-module></body></html>
