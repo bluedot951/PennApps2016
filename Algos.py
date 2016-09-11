@@ -166,8 +166,8 @@ def addSellOrder(o, buyPQ):
 
 #call functions, will be in the same data type/format as DB
 
-retval = 'string'
-request.post('url', retval)
+# retval = 'string'
+# request.post('url', retval)
 
 # import requests
 # import json
