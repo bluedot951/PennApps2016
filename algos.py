@@ -161,6 +161,7 @@ def execution(buyPQ, sellPQ, ledger):
             removepqentry(buyPQ, i)
 
     for i in sellPQ[:]:
+        ticker = i.t
         url = "https://pennapps2k16.herokuapp.com/price_history/" + ticker
 
         response = urllib2.urlopen(url)
