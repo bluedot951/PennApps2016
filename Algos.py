@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 import requests
 import json
 import datetime
@@ -105,7 +104,6 @@ SPQ.sort(key=lambda entry: (entry.p, entry.ts))
 retval = 'string'
 request.post('url', retval)
 
-=======
 # import requests
 # import json
 # import datetime
@@ -208,4 +206,3 @@ request.post('url', retval)
 #
 # # retval = #call functions, will be in the same data type/format as DB
 # request.post('url', retval)
->>>>>>> origin/master
