@@ -197,7 +197,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
         <search-bar></search-bar>
 
-        <info-card name="{{sticker}}" value="0.36" increasing percentage="0.02"></info-card>
+        <info-card name="{{sticker}}" value="{{lastItem}}" increasing={{increasing}} percentage="{{percentage}}"></info-card>
 
         <paper-material class="chart-base" elevation="2" id="chartBase">
           <chart-line data="{{data}}" class="chart"></chart-line>
@@ -259,6 +259,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           labels.push(hour + ':' + minutes );
           data.push(point[2]);
         }
+        
+        this.lastItem = Math.round(data[data.length - 1] * 100) / 100;
+        var secondLastItem = date[data.length - 2];
+        this.percentage = Math.round(Math.random() * 0.5 * 100) / 100;
+        this.increasing = this.lastItem > secondLastItem ? true : false;
 
         this.data = {
           labels: labels,
