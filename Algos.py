@@ -3,10 +3,11 @@ import json
 import datetime
 import Transfers
 
+
 nessie_key = 'b5f9af5da4a243e5e82982193e355b7f'
-url = 'something heroku endpoint'
+url = 'something heroku endpoint for PQ'
 response = requests.get('http://api.reimaginebanking.com/accounts/57d40aeee63c5995587e864f/customer?key={api}'.format(api =nessie_key ))
-response2 = requests.get(url)
+LPQ = requests.get(url)
 retval = json.loads(response2.text)
 print(response)
 print(response2)
@@ -20,8 +21,8 @@ centralinv = {}
 # BPQ is a list of listof(class order, tstamp) - BUY orders only
 BPQ = []
 
-for i in response2:
-    BPQ.append(i)
+SPQ = []
+
 
 
 
@@ -40,12 +41,6 @@ class user:
             self.inv[sym] += vol
         else:
             self.inv[sym] = vol
-
-
-u = user(10.00, {})
-u.changeinv('GTHB', 10)
-print(u.inv['GTHB'])
-
 
 # Order
 class order:
@@ -70,6 +65,7 @@ def removepqentry(myPQ, o):
     myPQ.remove(o)
 
 # o is of class order
+# also need to add change to general inventory & change to user account info
 def execution(buyPQ, sellPQ):
     for i in buyPQ[:]:
         for j in sellPQ[:]:
@@ -103,5 +99,8 @@ def addSellOrder(o, buyPQ):
 BPQ.sort(key=lambda entry: (-entry.p, entry.ts))
 SPQ.sort(key=lambda entry: (entry.p, entry.ts))
 
-retval = #call functions, will be in the same data type/format as DB
+#call functions, will be in the same data type/format as DB
+
+retval = 'string'
 request.post('url', retval)
+
