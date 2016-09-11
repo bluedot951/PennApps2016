@@ -66,16 +66,16 @@ def getData(pq, all_orders, ledger, new_order):
     print all_orders
     print ledger
     print new_order
-    o.u = new_order[3]
+    o.u = new_order[6]
     o.id = new_order[0]
-    o.t = new_order[4]
+    o.t = new_order[3]
     o.v = new_order[2]
     o.p = new_order[1]
 
-    o.im = new_order[6]
+    o.im = new_order[5]
     o.ts = time()
 
-    if new_order[5]:
+    if new_order[4]:
         o.s = "buy"
         BPQ.append(o)
     else:
@@ -113,6 +113,7 @@ def getData(pq, all_orders, ledger, new_order):
     # This takes pq, order, and ledger queries from rest.py to calculate market data
     # pq ~ [ [id, timestamp, orderId], ..., ... ]
     # order ~ [id, price, volume, userId, ticker, isBuy, isMarket]
+    # order ~ [id, price, volume, ticker, isBuy, isMarket, userId]
     # all_orders = listof (orders)
     # ledger ~ [ [id, timestamp, orderId] ...]
     # inventory: list of ( sticker, number)
