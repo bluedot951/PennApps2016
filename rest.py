@@ -28,6 +28,7 @@ import urlparse
 from custom_json_encoder import CustomJsonEncoder
 import algos
 import urllib2
+import json
 
 
 urlparse.uses_netloc.append("postgres")
