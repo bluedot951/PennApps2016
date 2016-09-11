@@ -1,34 +1,98 @@
-<<<<<<< HEAD
+
 import requests
 import json
 import datetime
 import Transfers
+from time import time
 
 
 nessie_key = 'b5f9af5da4a243e5e82982193e355b7f'
-url = 'something heroku endpoint for PQ'
 response = requests.get('http://api.reimaginebanking.com/accounts/57d40aeee63c5995587e864f/customer?key={api}'.format(api =nessie_key ))
-LPQ = requests.get(url)
-retval = json.loads(response2.text)
 print(response)
-print(response2)
+
+# # user = user ID
+# self.u = user
+# # ID = order ID
+# self.id = ID
+# self.t = ticker
+# self.s = side
+# self.v = vol
+# self.p = price
+# self.ot = ordertype
+# self.ts = tstamp
+# order ~ [id, price, volume, userId, ticker, isBuy, isMarket]
 
 
 #retval is python dictionary
+def getData(pq, all_orders, ledger, new_order):
 
-# Central Inventory/Pool is a dict of ticker: amount
-centralinv = {}
+    o = order()
 
-# BPQ is a list of listof(class order, tstamp) - BUY orders only
-BPQ = []
+    o.u = newOrder[3]
+    o.id = new_order[0]
+    o.t = new_order[4]
+    if new_order[5]:
+        o.s = "buy"
+    else:
+        o.s = "sell"
+    o.v = new_order[2]
+    o.p = new_order[1]
 
-SPQ = []
+    o.im = order[6]
+    o.ts = time()
+
+    pq.append(o)
+
+    BPQ = []
+    SPQ = []
+
+    for p in pq:
+        orderID = p[2] # reverse lookup for side
+        myOrder = None
+
+        isBuy = False
+
+        for order in all_orders:
+            if order[0] == orderID:
+                isBuy = order[5]
+
+        if isBuy:
+            BPQ.append(p)
+        else:
+            SPQ.append(p)
+
+    BPQ.sort(key=lambda entry: (-entry.p, entry.ts))
+    SPQ.sort(key=lambda entry: (entry.p, entry.ts))
+    execution(BPQ, SPQ, ledger)
+
+    pqToRet = BPQ
+    pqToRet.extend(SPQ)
+
+    return(pqToRet, ledger)
 
 
+    return (pq, ledger)
+
+    """ This takes pq, order, and ledger queries from rest.py to calculate market data"""
+    # pq ~ [ [id, timestamp, orderId], ..., ... ]
+    # order ~ [id, price, volume, userId, ticker, isBuy, isMarket]
+    # all_orders = listof (orders)
+    # ledger ~ [ [id, timestamp, orderId] ...]
+    # inventory: list of ( sticker, number)
+
+    # take and parse the input data
+
+    # aggregrate memory of pending orders
 
 
-# SPQ is a list of listof(class, order, tstamp) - SELL orders only
-SPQ = []
+    # calculate points of interest -> Market Price
+
+    #
+    # Dequeue PG to Ledger
+
+    # Update Price History
+
+
 
 # User
 
@@ -45,7 +109,7 @@ class user:
 
 # Order
 class order:
-    def __init__(self, user, ID, ticker, side, vol, price, ordertype, tstamp):
+    def __init__(self, user, ID, ticker, side, vol, price, ismarket, tstamp):
         # user = user ID
         self.u = user
         # ID = order ID
@@ -54,20 +118,20 @@ class order:
         self.s = side
         self.v = vol
         self.p = price
-        self.ot = ordertype
+        self.im = ismarket
         self.ts = tstamp
 
 
-def addglentry(o):
-    requests.post('heroku url', data = o, json = o)
+# def addglentry(o):
+#     requests.post('heroku url', data = o, json = o)
 
 def removepqentry(myPQ, o):
-    addglentry(o)
+    # addglentry(o)
     myPQ.remove(o)
 
 # o is of class order
 # also need to add change to general inventory & change to user account info
-def execution(buyPQ, sellPQ):
+def execution(buyPQ, sellPQ, ledger):
     for i in buyPQ[:]:
         for j in sellPQ[:]:
             if i.price >= j.price:
@@ -75,12 +139,14 @@ def execution(buyPQ, sellPQ):
                     transfer('to', '57d40d4ee63c5995587e8651', j.vol * j.price )
                     transfer('from', HTSECheckingAccount, j.vol*j.price)
                     i.vol -= j.vol
+                    ledger.append(j)
                     removepqentry(sellPQ, j)
                 else:
                     transfer('to', HTSECheckingAccount, i.vol * j.price)
                     transfer('from' '57d40d4ee63c5995587e8651', i.vol * j.price)
                     j.vol -= i.vol
                     i.vol = 0
+                    ledger.append(i)
                     removepqentry(buyPQ, i)
 
 def addBuyOrder(o, buyPQ):
@@ -97,15 +163,12 @@ def addSellOrder(o, buyPQ):
         ind += 1
     buyPQ[ind:ind] = [o]
 
-BPQ.sort(key=lambda entry: (-entry.p, entry.ts))
-SPQ.sort(key=lambda entry: (entry.p, entry.ts))
 
 #call functions, will be in the same data type/format as DB
 
 retval = 'string'
 request.post('url', retval)
 
-=======
 # import requests
 # import json
 # import datetime
@@ -208,4 +271,4 @@ request.post('url', retval)
 #
 # # retval = #call functions, will be in the same data type/format as DB
 # request.post('url', retval)
->>>>>>> origin/master
+
