@@ -289,12 +289,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         this.balance = xhr.response
       },
       handleInventoryResponse: function(e, xhr) {
-        console.log(xhr.response);
-
         var inventory = [];
 
-        for (var i = 0; i < xhr.response.length; i++) {
-          var item = xhr.reponse[i]
+        for (var i = 0; i < data.length; i++) {
+          var item = xhr.response[i];
           inventory.push({
             ticker: item[2],
             count: item[3]
