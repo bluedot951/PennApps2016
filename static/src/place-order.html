@@ -18,7 +18,8 @@
 			}
 			.container {
 				padding: 40px 0;
-				width: 80%;
+				width: 85%;
+				max-width: 750px;
 				display: block;
 				margin: auto;
 			}
@@ -37,36 +38,62 @@
 				font-weight: 300;
 				text-align: center;
 				display: inline-block;
-				padding: 5px 30px;
-				max-width: 50px;
-				margin: 0 3%;
+				max-height: 40px;
+				width: 10vw;
+				min-width: 80px;
+
+				margin: 5%;
 			}
 
 			.row {
 				display: flex;
+				justify-content: center;
+			}
+			.buttons {
+				display: flex;
+				flex-flow: nowrap column;
+				justify-content: center;			
+			}
+			.button {
+				display: flex;
+				justify-content: center;
+				align-items: center;
+			}
+			.buttons p {
+				text-align: center;
+				margin: 0;
+				padding: 0;
+				flex: 1;
+			}
 
+			@media (min-width: 640px) {
+				.buttons {
+					flex-flow: nowrap row;
+					
+				}
 			}
 		</style>
 
 		<div class="container">
 			<h4 class="text">Place Order: </h4>
 
-
-				<paper-input placeholder="Amount"></paper-input>
-
-				<paper-radio-group selected="a" aria-labelledby="Market/Limit">
-				  <paper-radio-button name="a">Market</paper-radio-button>
-				  <paper-radio-button name="b">Limit</paper-radio-button>
-				</paper-radio-group>
-
 				<div class="row">
-					<paper-material elevation="1" class="button">
-						Buy
-					</paper-material>
+					<paper-input placeholder="Amount"></paper-input>
 
-					<paper-material elevation="1" class="button">
-						Sell
-					</paper-material>	
+					<paper-radio-group selected="a" aria-labelledby="Market/Limit">
+					  <paper-radio-button name="a">Market</paper-radio-button>
+					  <paper-radio-button name="b">Limit</paper-radio-button>
+					</paper-radio-group>
+
+					<div class="buttons">
+						<paper-material elevation="1" class="button">
+							<p>Buy</p>
+						</paper-material>
+
+						<paper-material elevation="1" class="button">
+							<p>Sell</p>
+						</paper-material>	
+					</div>
 				</div>
 
 		</div>
