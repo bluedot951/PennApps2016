@@ -193,20 +193,16 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         var labels = [];
         var data = [];
 
-
-        rawData.forEach(function(point, index) {
-
-          if (index >= 100) {
-            break;
-          }
-          var date = new Date(point[1])
+        for (var i = 0 ; i <= 100; i++) {
+          var point = rawData[i];
+          var date = new Date([1]);
           var hour = date.getHours();
           var minutes = date.getMinutes();
           var seconds = date.getSeconds();
 
           labels.push(hour + ':' + minutes + ':' + seconds);
           data.push(point[2]);
-        })
+        }
 
         this.data = {
           labels: labels,
