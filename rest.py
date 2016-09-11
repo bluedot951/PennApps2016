@@ -78,7 +78,7 @@ def get_ledgers():
     return jsonify(cursor.fetchall())
 
 @app.route('/priority_queue/', methods=['GET'])
-def get_ledgers():
+def get_priority_queue():
     cursor.execute(
         'SELECT * FROM "priority_queue"'
     )
