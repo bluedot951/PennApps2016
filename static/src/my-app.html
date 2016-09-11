@@ -184,7 +184,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       var x0 = 512, y0 = 15;
       var x1 = 750, y1 = 30;
 
-      return y0 + (yi - y0)((x - x0)/(x1 - x0));
+      var result = Math.round(y0 + ((y1 - y0) * ((x - x0)/(x1 - x0))));
+      if (result < 10)
+        return 10;
+      else if (result > 30)
+        return 30
+      else 
+        return result;
     }
     Polymer({
       is: 'my-app',
@@ -207,8 +213,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         var data = [];
           
         var width = this.$.chartBase.offsetWidth;
+
+        var numPoints = interpolate(width);
+        console.log(numPoints);
         
-        for (var i = 0 ; i <= 30; i++) {
+        for (var i = 0 ; i <= numPoints; i++) {
           var point = rawData[i];
           var date = new Date(point[1]);
           var hour = date.getHours();
