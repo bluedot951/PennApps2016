@@ -2,7 +2,7 @@
 import requests
 import json
 import datetime
-from Transfers import transfer, HTSECheckingAccount
+from transfers import transfer, HTSECheckingAccount
 from time import time
 
 
