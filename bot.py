@@ -2,7 +2,7 @@ import threading
 from urllib import urlencode
 from urllib2 import Request, urlopen
 
-threading.Thread()
+
 
 
 
@@ -35,10 +35,24 @@ penn_post_fields = {
 	"userId":0
 }
 
+def request1():
 
-request1 = Request(url, urlencode(goog_post_fields).encode())
-request2 = Request(url, urlencode(penn_post_fields).encode())
-request3 = Request(url, urlencode(gthb_post_fields).encode())
+  Request(url, urlencode(goog_post_fields).encode())
+  urlopen(request1).read().decode()
+
+def request2():
+  Request(url, urlencode(penn_post_fields).encode())
+  urlopen(request2).read().decode()
+
+def request3():
+  Request(url, urlencode(gthb_post_fields).encode())
+  urlopen(request3).read().decode()
+# request2 = Request(url, urlencode(penn_post_fields).encode())
+# request3 = Request(url, urlencode(gthb_post_fields).encode())
 
 json = urlopen(request1).read().decode()
 print(json)
+
+threading.Thread(request1).start()
+threading.Thread(request2).start()
+threading.Thread(request3).start()
