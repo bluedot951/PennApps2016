@@ -102,7 +102,7 @@ def getData(pq, all_orders, ledger, new_order):
 
     BPQ.sort(key=lambda entry: (-entry.p, entry.ts))
     SPQ.sort(key=lambda entry: (entry.p, entry.ts))
-    execution(BPQ, SPQ, ledger)
+    BPQ, SPQ, ledger = execution(BPQ, SPQ, ledger)
 
     pqToRet = BPQ
     pqToRet.extend(SPQ)
@@ -192,6 +192,7 @@ def execution(buyPQ, sellPQ, ledger):
                     i.vol = 0
                     ledger.append(i)
                     removepqentry(buyPQ, i)
+    return buyPQ, sellPQ, ledger
 
 def addBuyOrder(o, buyPQ):
     price = o.p
