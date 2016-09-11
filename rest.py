@@ -26,7 +26,7 @@ import random
 import psycopg2
 import urlparse
 from custom_json_encoder import CustomJsonEncoder
-import algos
+import Algos
 
 urlparse.uses_netloc.append("postgres")
 url = urlparse.urlparse('postgres://gxspomxmufoybd:dskomEuwa9JYaxf8Jd7h8JYVKo@ec2-54-221-253-117.compute-1.amazonaws.com:5432/d62ndf8grb25cb')
@@ -157,8 +157,8 @@ def orderCallback(val, price, ticker, isBuy, isMarket, userId):
     pq = jsonify(cursor.fetchall())
 
 
-    # call an algos.py function right here
-    new_market_price, datetime_of_update = algos.getData(pq, gl, old_orders, new_order)
+    # call an Algos.py function right here
+    new_market_price, datetime_of_update = Algos.getData(pq, old_orders, gl, new_order)
 
     # # update priority queue
     # cursor.execute(
