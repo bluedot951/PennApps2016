@@ -56,7 +56,7 @@ def get_balance():
     response = urllib2.urlopen(url)
     data = json.load(response)
 
-    return data["balance"]
+    return jsonify(data["balance"])
 
 
 
