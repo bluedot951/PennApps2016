@@ -108,6 +108,7 @@ def getData(pq, all_orders, ledger, new_order):
     # SPQ.sort(key=lambda entry: (entry.p, entry.ts))
     BPQ, SPQ, ledger = execution(BPQ, SPQ, ledger)
 
+
     pqToRet = BPQ
     pqToRet.extend(SPQ)
 
@@ -157,7 +158,7 @@ def execution(buyPQ, sellPQ, ledger):
     #
     #     marketPrice = float(data[len(data)-1][2])
     #
-    #     if i.price >= marketPrice or i.im:
+    #     if i.p >= marketPrice or i.im:
     #         transfer('to', '57d40d4ee63c5995587e8651', i.vol * marketPrice)
     #         transfer('from', HTSECheckingAccount, i.vol * marketPrice)
     #
@@ -173,7 +174,7 @@ def execution(buyPQ, sellPQ, ledger):
     #     marketPrice = float(data[len(data)-1][2])
     #
     #
-    #     if i.price <= marketPrice or i.im:
+    #     if i.p <= marketPrice or i.im:
     #         transfer('to', HTSECheckingAccount, i.vol * marketPrice)
     #         transfer('from' '57d40d4ee63c5995587e8651', i.vol * marketPrice)
     #
@@ -182,16 +183,16 @@ def execution(buyPQ, sellPQ, ledger):
     #
     for i in buyPQ[:]:
         for j in sellPQ[:]:
-            if i.price >= j.price:
+            if i.p >= j.p:
                 if i.vol > j.vol:
-                    transfer('to', '57d40d4ee63c5995587e8651', j.vol * j.price )
-                    transfer('from', HTSECheckingAccount, j.vol*j.price)
+                    transfer('to', '57d40d4ee63c5995587e8651', j.vol * j.p )
+                    transfer('from', HTSECheckingAccount, j.vol*j.p)
                     i.vol -= j.vol
                     ledger.append(j)
                     removepqentry(sellPQ, j)
                 else:
-                    transfer('to', HTSECheckingAccount, i.vol * j.price)
-                    transfer('from', '57d40d4ee63c5995587e8651', i.vol * j.price)
+                    transfer('to', HTSECheckingAccount, i.vol * j.p)
+                    transfer('from', '57d40d4ee63c5995587e8651', i.vol * j.p)
                     j.vol -= i.vol
                     i.vol = 0
                     ledger.append(i)
