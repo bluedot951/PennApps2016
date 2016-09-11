@@ -2,10 +2,8 @@ import requests
 import numpy
 import threading
 
-DB = requests.get('heroku db for stickers and their historic prices')
 
-
-def lstsqest(data):
+def calculatePrice(data):
     # [ [id, datetime, price] [] [] ... ]
     # threading.Timer(10.0, getstd).start()
 

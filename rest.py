@@ -31,6 +31,7 @@ import urllib2
 import json
 
 
+
 urlparse.uses_netloc.append("postgres")
 url = urlparse.urlparse('postgres://gxspomxmufoybd:dskomEuwa9JYaxf8Jd7h8JYVKo@ec2-54-221-253-117.compute-1.amazonaws.com:5432/d62ndf8grb25cb')
 
@@ -46,6 +47,12 @@ cursor = conn.cursor()
 app = Flask(__name__, static_url_path='')
 app.json_encoder = CustomJsonEncoder
 api = Api(app)
+
+
+
+@app.route('/')
+def root():
+    return app.send_static_file('index.html')
 
 
 @app.route('/balance', methods=['GET'])
@@ -190,7 +197,7 @@ def orderCallback(vol, price, ticker, isBuy, isMarket, userId):
 
     # update priority queue
     cursor.execute(
-        'DELETE TABLE "priority_queue" *'
+        'DELETE FROM "priority_queue" *'
     )
     conn.commit()
     for order in new_pq:
@@ -201,7 +208,7 @@ def orderCallback(vol, price, ticker, isBuy, isMarket, userId):
 
     # update ledger
     cursor.execute(
-        'DELETE TABLE "ledger" *'
+        'DELETE FROM "ledger" *'
     )
     conn.commit()
     for l in new_ledger:
@@ -221,10 +228,6 @@ def orderCallback(vol, price, ticker, isBuy, isMarket, userId):
     operation = '+' if isBuy else '-'
 
     # increase user inventory, decrease from the central market
-    cursor.execute(
-        'UPDATE "inventory" SET count = count %s %s WHERE userid = 2 AND ticker = \'%s\''
-        % (operation, vol, ticker)
-    )
     cursor.execute(
         'UPDATE "inventory" SET count = count %s %s WHERE userid = 2 AND ticker = \'%s\''
         % (operation, vol, ticker)
