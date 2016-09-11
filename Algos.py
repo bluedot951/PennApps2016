@@ -97,6 +97,3 @@ def addSellOrder(o, buyPQ):
 
 BPQ.sort(key=lambda entry: (-entry.p, entry.ts))
 SPQ.sort(key=lambda entry: (entry.p, entry.ts))
-
-retval = #call functions, will be in the same data type/format as DB
-request.post('url', retval)
