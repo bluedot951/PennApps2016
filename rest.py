@@ -130,6 +130,8 @@ def orderCallback(vol, price, ticker, isBuy, isMarket, userId):
         'SELECT * FROM "order"'
     )
     old_orders = jsonify(cursor.fetchall())
+    print 'old orders'
+    print old_orders
 
     # create new order
     id = random.randint(0, 100000000)
@@ -142,20 +144,26 @@ def orderCallback(vol, price, ticker, isBuy, isMarket, userId):
         'SELECT FROM "order" WHERE id = %s' % id
     )
     new_order = jsonify(cursor.fetchall())
+    print 'new order'
+    print new_order
 
     # collect past general ledger history
     cursor.execute(
         'SELECT * FROM "ledger"'
     )
     gl = jsonify(cursor.fetchall())
+    print 'gl'
+    print gl
 
     # collect priority queue
     cursor.execute(
         'SELECT * FROM "priority_queue"'
     )
     pq = jsonify(cursor.fetchall())
-    conn.commit()
-    return new_order
+    print 'pq'
+    print pq
+    # conn.commit()
+
 
     # call an algos.py function right here
     # new_market_price, datetime_of_update = algos.getData(pq, old_orders, gl, new_order)
@@ -174,11 +182,11 @@ def orderCallback(vol, price, ticker, isBuy, isMarket, userId):
     #
     # # update user inventory
     # if
+    #
+    # conn.commit()
 
-    conn.commit()
-
-    # return jsonify({'status': 200, 'message': 'success :)'})
-    return jsonify({'new_market_price' : new_market_price, 'date_of_update': datetime_of_update})
+    return jsonify({'status': 200, 'message': 'success :)'})
+    # return jsonify({'new_market_price' : new_market_price, 'date_of_update': datetime_of_update})
 
 
 if __name__ == '__main__':
