@@ -21,6 +21,7 @@ Display Information
 from flask import Flask, abort, jsonify, request, send_from_directory, render_template
 from flask_restful import Resource, Api
 
+import os
 import random
 import psycopg2
 import urlparse
@@ -132,4 +133,5 @@ def sell():
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    port = int(os.environ.get('PORT', 5000))
+    app.run(host='0.0.0.0', port=port)
