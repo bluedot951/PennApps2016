@@ -4,7 +4,7 @@ import datetime
 import Transfers
 
 nessie_key = 'b5f9af5da4a243e5e82982193e355b7f'
-url = 'something endpoint'
+url = 'something heroku endpoint'
 response = requests.get('http://api.reimaginebanking.com/accounts/57d40aeee63c5995587e864f/customer?key={api}'.format(api =nessie_key ))
 response2 = requests.get(url)
 retval = json.loads(response2.text)
@@ -19,6 +19,11 @@ centralinv = {}
 
 # BPQ is a list of listof(class order, tstamp) - BUY orders only
 BPQ = []
+
+for i in response2:
+    BPQ.append(i)
+
+
 
 # SPQ is a list of listof(class, order, tstamp) - SELL orders only
 SPQ = []
