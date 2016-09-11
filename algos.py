@@ -62,11 +62,11 @@ def getData(pq, all_orders, ledger, new_order):
     SPQ = []
 
     if new_order[4]:
-        new_order[4] = "buy"
+        omg = "buy"
     else:
-        new_order[4] = "sell"
+        omg = "sell"
 
-    o = Order(new_order[6], new_order[0], new_order[3], new_order[4], new_order[2], new_order[1], new_order[5], time())
+    o = Order(new_order[6], new_order[0], new_order[3], omg, new_order[2], new_order[1], new_order[5], time())
     print pq
     print all_orders
     print ledger
@@ -80,7 +80,7 @@ def getData(pq, all_orders, ledger, new_order):
     # o.im = new_order[5]
     # o.ts = time()
 
-    if new_order[4] == 'buy':
+    if new_order[4]:
         BPQ.append(o)
     else:
         SPQ.append(o)
