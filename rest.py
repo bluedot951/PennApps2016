@@ -47,6 +47,10 @@ app = Flask(__name__, static_url_path='')
 app.json_encoder = CustomJsonEncoder
 api = Api(app)
 
+@app.route('/')
+def root():
+    return app.send_static_file('/static/index.html')
+
 
 @app.route('/balance', methods=['GET'])
 def get_balance():
