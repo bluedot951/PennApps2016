@@ -106,9 +106,9 @@ def getData(pq, all_orders, ledger, new_order):
     print 'queues'
     print BPQ
     print SPQ
-
-    BPQ.sort(key=lambda entry: (-entry.p, entry.ts))
-    SPQ.sort(key=lambda entry: (entry.p, entry.ts))
+    #
+    # BPQ.sort(key=lambda entry: (-entry.p, entry.ts))
+    # SPQ.sort(key=lambda entry: (entry.p, entry.ts))
     execution(BPQ, SPQ, ledger)
 
     pqToRet = BPQ
