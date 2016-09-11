@@ -137,7 +137,7 @@ def orderCallback(vol, price, ticker, isBuy, isMarket, userId):
         'INSERT INTO "order"(id, vol, price, ticker, isbuy, ismarket, userid) VALUES '
         '(%s, %s, %s, \'%s\', %s, %s, %s);' % ('DEFAULT', vol, price, ticker, isBuy, isMarket, userId)
     )
-    conn.commit()
+
     cursor.execute(
         'SELECT FROM "order" WHERE id = %s' % id
     )
@@ -154,7 +154,7 @@ def orderCallback(vol, price, ticker, isBuy, isMarket, userId):
         'SELECT * FROM "priority_queue"'
     )
     pq = jsonify(cursor.fetchall())
-
+    conn.commit()
     return new_order
 
     # call an algos.py function right here
