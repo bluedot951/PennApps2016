@@ -49,7 +49,7 @@ api = Api(app)
 
 @app.route('/')
 def root():
-return app.send_static_file('/static/index.html')
+    return app.send_static_file('/static/index.html')
 
 
 @app.route('/balance', methods=['GET'])
