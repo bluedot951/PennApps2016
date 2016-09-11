@@ -291,7 +291,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       handleInventoryResponse: function(e, xhr) {
         var inventory = [];
 
-        for (var i = 0; i < data.length; i++) {
+        for (var i = 0; i < xhr.response.length; i++) {
           var item = xhr.response[i];
           inventory.push({
             ticker: item[2],
