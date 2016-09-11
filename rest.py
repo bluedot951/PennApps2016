@@ -142,7 +142,7 @@ def orderCallback(vol, price, ticker, isBuy, isMarket, userId):
         'INSERT INTO "order"(id, vol, price, ticker, isbuy, ismarket, userid) VALUES '
         '(%s, %s, %s, \'%s\', %s, %s, %s);' % ('DEFAULT', vol, price, ticker, isBuy, isMarket, userId)
     )
-
+    conn.commit()
     cursor.execute(
         'SELECT FROM "order" WHERE id = %s' % id
     )
