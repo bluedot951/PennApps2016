@@ -14,20 +14,29 @@ conn = psycopg2.connect(
 )
 cursor = conn.cursor()
 for i in range(289):
+  cursor.execute(
+      'INSERT INTO "GOOG_price_history"(id, stamp, price) VALUES (%s, now() + interval \'%s minute\', %s);' % (i, i, (0.25 + random.uniform(-0.05, 0.05)))
+  )
   # cursor.execute(
-  #     'INSERT INTO "GOOG_price_history"(id, stamp, price) VALUES (%s, now() + interval \'%s minute\', %s);' % (i, i, (0.25 + random.uniform(-0.05, 0.05)))
+  #     'INSERT INTO "GTHB_price_history"(id, stamp, price) VALUES (%s, now() + interval \'%s minute\', %s);' % (i, i, (0.25 + random.uniform(-0.05, 0.05)))
   # )
-  cursor.execute(
-      'INSERT INTO "GTHB_price_history"(id, stamp, price) VALUES (%s, now() + interval \'%s minute\', %s);' % (i, i, (0.25 + random.uniform(-0.05, 0.05)))
-  )
-  cursor.execute(
-      'INSERT INTO "PENN_price_history"(id, stamp, price) VALUES (%s, now() + interval \'%s minute\', %s);' % (i, i, (0.25 + random.uniform(-0.05, 0.05)))
-  )
+  # cursor.execute(
+  #     'INSERT INTO "PENN_price_history"(id, stamp, price) VALUES (%s, now() + interval \'%s minute\', %s);' % (i, i, (0.25 + random.uniform(-0.05, 0.05)))
+  # )
 
 
 # cursor.execute(
 #     'INSERT INTO entity(id, username, balance) VALUES (DEFAULT, "%s", 100.00);' % ('wayway_buffet69')
 # )
 
+# cursor.execute(
+#       'INSERT INTO "ledger"(id, stamp, orderid) VALUES (%s, now() + interval \'%s minute\', %s);' % (i, i - 42, (0.25 + random.uniform(-0.05, 0.05)))
+#   )
+#   cursor.execute(
+#       'INSERT INTO "ledger"(id, stamp, orderid) VALUES (%s, now() + interval \'%s minute\', %s);' % (i, i - 42, (0.25 + random.uniform(-0.05, 0.05)))
+#   )
+#   cursor.execute(
+#       'INSERT INTO "ledger"(id, stamp, orderid) VALUES (%s, now() + interval \'%s minute\', %s);' % (i, i - 42, (0.25 + random.uniform(-0.05, 0.05)))
+#   )
 
 conn.commit()
