@@ -235,7 +235,6 @@ def orderCallback(vol, price, ticker, isBuy, isMarket, userId):
     conn.commit()
 
     return jsonify({'status': 200, 'message': 'success :)'})
-    # return jsonify({'new_market_price' : new_market_price, 'date_of_update': datetime_of_update})
 
 
 if __name__ == '__main__':
