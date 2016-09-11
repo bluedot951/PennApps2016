@@ -176,11 +176,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         </div>
         <iron-selector selected="{{sticker}}" attr-for-selected="name" class="drawer-list" role="navigation">
 
-
           <template is="dom-repeat" items="{{inventory}}">
-            <div name="{{item[2]}}" class="row">
-                <h3  class="sticker">{{item[2]}}</h3>
-                <h3 class="count">{{item[3]}}</h3>
+            <div name="{{item.ticker}}" class="row">
+                <h3  class="sticker">{{item.ticker}}</h3>
+                <h3 class="count">{{item.count}}</h3>
             </div>
           </template>
 
@@ -214,6 +213,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.register('/service-worker.js');
     }
+
     function interpolate(x) {
       var x0 = 512, y0 = 15;
       var x1 = 750, y1 = 30;
@@ -249,7 +249,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         var width = this.$.chartBase.offsetWidth;
 
         var numPoints = interpolate(width);
-        console.log(numPoints);
         
         for (var i = 0 ; i <= numPoints; i++) {
           var point = rawData[i];
@@ -291,7 +290,17 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       },
       handleInventoryResponse: function(e, xhr) {
         console.log(xhr.response);
-        this.inventory = xhr.reponse;
+
+        var inventory = [];
+
+        for (var i = 0; i < xhr.response.length; i++) {
+          var item = xhr.reponse[i]
+          inventory.push({
+            ticker: item[2],
+            count: item[3]
+          })
+        }
+        this.inventory = inventory;
       } 
       // ready: function() {
 
