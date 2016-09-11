@@ -165,7 +165,7 @@ def orderCallback(vol, price, ticker, isBuy, isMarket, userId):
 
 
     # call an algos.py function right here
-    new_market_price, datetime_of_update = algos.getData(pq, old_orders, gl, new_order)
+    new_market_price, datetime_of_update = algos.getData(pq, old_orders, gl, new_order[0])
 
     # # update priority queue
     # cursor.execute(
