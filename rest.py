@@ -26,7 +26,7 @@ import random
 import psycopg2
 import urlparse
 from custom_json_encoder import CustomJsonEncoder
-import Algos
+# import Algos
 
 urlparse.uses_netloc.append("postgres")
 url = urlparse.urlparse('postgres://gxspomxmufoybd:dskomEuwa9JYaxf8Jd7h8JYVKo@ec2-54-221-253-117.compute-1.amazonaws.com:5432/d62ndf8grb25cb')
