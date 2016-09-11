@@ -194,7 +194,7 @@ def orderCallback(vol, price, ticker, isBuy, isMarket, userId):
 
     # update priority queue
     cursor.execute(
-        'DELETE FROM TABLE "priority_queue" *'
+        'DELETE FROMg "priority_queue" *'
     )
     conn.commit()
     for order in new_pq:
@@ -205,7 +205,7 @@ def orderCallback(vol, price, ticker, isBuy, isMarket, userId):
 
     # update ledger
     cursor.execute(
-        'DELETE FROM GTABLE "ledger" *'
+        'DELETE FROM "ledger" *'
     )
     conn.commit()
     for l in new_ledger:
