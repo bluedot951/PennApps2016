@@ -161,7 +161,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
         <search-bar></search-bar>
 
-        <info-card name="GTHB" value="0.36" increasing percentage="0.02"></info-card>
+        <info-card name="{{sticker}}" value="0.36" increasing percentage="0.02"></info-card>
 
         <paper-material class="chart-base" elevation="2">
           <chart-line data="{{data}}" class="chart"></chart-line>
@@ -180,7 +180,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       properties: {
         sticker: {
           type: String,
-          value: 'GOOG',
+          value: 'GTHB',
           observer: '_stickerChanged'
         }
       },
@@ -193,11 +193,16 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         var labels = [];
         var data = [];
 
+        for (var i = 0 ; i <= 30; i++) {
+          var point = rawData[i];
+          var date = new Date(point[1]);
+          var hour = date.getHours();
+          var minutes = date.getMinutes();
+          var seconds = date.getSeconds();
 
-        rawData.forEach(function(point) {
-          labels.push(point[1]);
+          labels.push(hour + ':' + minutes + ':' + seconds);
           data.push(point[2]);
-        })
+        }
 
         this.data = {
           labels: labels,
