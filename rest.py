@@ -130,10 +130,10 @@ def orderCallback(vol, price, ticker, isBuy, isMarket, userId):
         'SELECT * FROM "order"'
     )
     a = cursor.fetchall()
-    print 'a'
-    print a
-    old_orders = jsonify(**a)
-    print 'old orders'
+    old_orders = a
+    # print a
+    # old_orders = jsonify(**a)
+    # print 'old orders'
     print old_orders
 
     # create new order
@@ -149,7 +149,8 @@ def orderCallback(vol, price, ticker, isBuy, isMarket, userId):
     a = cursor.fetchall()
     print 'a'
     print a
-    new_order = jsonify(**a)
+    # new_order = jsonify(**a)
+    new_order = a
     print 'new order'
     print new_order
 
@@ -160,8 +161,7 @@ def orderCallback(vol, price, ticker, isBuy, isMarket, userId):
     a = cursor.fetchall()
     print 'a'
     print a
-    gl = jsonify(**a)
-    # gl = jsonify(**cursor.fetchall())
+    gl = a
     print 'gl'
     print gl
 
@@ -172,7 +172,7 @@ def orderCallback(vol, price, ticker, isBuy, isMarket, userId):
     a = cursor.fetchall()
     print 'a'
     print a
-    pq= jsonify(**a)
+    pq = a
     # pq = jsonify(cursor.fetchall())
     print 'pq'
     print pq
