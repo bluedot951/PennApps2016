@@ -100,7 +100,7 @@
 							<p>Buy</p>
 						</paper-button>
 
-						<paper-button elevation="1" class="button">
+						<paper-button elevation="1" class="button" on-tap="sellAction">
 							<p>Sell</p>
 						</paper-button>	
 					</div>
@@ -143,7 +143,33 @@
       				userId: 0
       			}
 				
-				console.log($);
+				$.ajax({
+				  type: "POST",
+				  url: '/buy',
+				  data: data,
+				  success: function(data) {
+					console.log(data);
+				  }
+				});
+      		},
+
+      		sellAction: function(e) {
+      			var data = {
+      				val: this.amount,
+      				price: this.price,
+      				ticker: this.ticker,
+      				isMarket: this.hideMaximum,
+      				userId: 0
+      			}
+				
+				$.ajax({
+				  type: "POST",
+				  url: '/sell',
+				  data: data,
+				  success: function(data) {
+					console.log(data);
+				  }
+				});
       		}
     	});
   	</script>
