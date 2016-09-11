@@ -34,7 +34,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   <template>
     <iron-ajax
     auto
-    url="/price_history/GOOG"
+    url="/price_history/{{sticker}}"
     handle-as="json"
     on-response="handleResponse"
     debounce-duration="300"></iron-ajax>
@@ -49,6 +49,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       }
 
       app-header {
+        padding: 10px; 
         color: var(--app-text-color);
       }
       app-header paper-icon-button {
@@ -105,11 +106,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       .chart-base {
         width: 80%;
-        max-width: 800px;
+        max-width: 750px;
 
         display: block;
         margin: 0 auto;
-        margin-top: 7vh;
+        margin-top: 30px;
         background-color: #fff;
       }
 
@@ -144,7 +145,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         <div class="inventory">
           Inventory
         </div>
-        <iron-selector selected="{{page}}" attr-for-selected="name" class="drawer-list" role="navigation">
+        <iron-selector selected="{{sticker}}" attr-for-selected="name" class="drawer-list" role="navigation">
               <h3 name="GTHB" class="sticker">GTHB</h3>
               <h3 name="GOOG" class="sticker">GOOG</h3>
               <h3 name="PENN" class="sticker">PENN</h2>
@@ -154,10 +155,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       <!-- Main content -->
       <app-header-layout has-scrolling-region>
 
-        <app-header condenses reveals>
-          <app-toolbar>
+        <app-header>
             <paper-icon-button icon="menu" drawer-toggle></paper-icon-button>
-          </app-toolbar>
         </app-header>
 
         <search-bar></search-bar>
@@ -179,20 +178,18 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       is: 'my-app',
 
       properties: {
-        page: {
+        sticker: {
           type: String,
-          reflectToAttribute: true,
-          observer: '_routePageChanged'
+          value: 'GOOG',
+          observer: '_stickerChanged'
         }
       },
 
-      _routePageChanged: function(page) {
-        console.log(page)
-        this.page = page || '';
+      _stickerChanged: function(sticker) {
+        console.log(sticker);
       },
       handleResponse: function(e, xhr) {
         var rawData = xhr.response;
-        console.log(rawData);
         var labels = [];
         var data = [];
 

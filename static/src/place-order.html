@@ -1,7 +1,7 @@
 <link rel="import" href="../bower_components/polymer/polymer.html">
 <link rel="import" href="../bower_components/paper-input/paper-input.html">
 <link rel="import" href="../bower_components/paper-radio-group/paper-radio-group.html">
-<link rel="import" href="../bower_components/paper-material/paper-material.html">
+<link rel="import" href="../bower_components/paper-button/paper-button.html">
 
 
 <dom-module id="place-order">
@@ -13,7 +13,7 @@
 			}
 			paper-radio-group {
 				display: block;
-				margin: auto;
+				margin: 0 auto;
 				padding: 20px;
 			}
 			.container {
@@ -22,6 +22,7 @@
 				max-width: 750px;
 				display: block;
 				margin: auto;
+				min-height: 150px;
 			}
 			.text {
 				color: var(--app-text-color);
@@ -48,6 +49,11 @@
 			.row {
 				display: flex;
 				justify-content: center;
+			}
+
+			.col {
+				display: flex;
+				flex-direction: column;
 			}
 			.buttons {
 				display: flex;
@@ -78,21 +84,25 @@
 			<h4 class="text">Place Order: </h4>
 
 				<div class="row">
-					<paper-input placeholder="Amount"></paper-input>
+					<div class="col">
+						<paper-input label="Amount"></paper-input>
+						<paper-input hidden$="{{hideMaximum}}" label="Price"></paper-input>
+					</div>
 
-					<paper-radio-group selected="a" aria-labelledby="Market/Limit">
-					  <paper-radio-button name="a">Market</paper-radio-button>
-					  <paper-radio-button name="b">Limit</paper-radio-button>
+					<paper-radio-group selected="a" on-paper-radio-group-changed="_handleChange" aria-labelledby="Market/Limit">
+						<paper-radio-button name="a" >Limit</paper-radio-button>
+						<paper-radio-button name="b">Market</paper-radio-button>
 					</paper-radio-group>
+					
 
 					<div class="buttons">
-						<paper-material elevation="1" class="button">
+						<paper-button elevation="1" class="button">
 							<p>Buy</p>
-						</paper-material>
+						</paper-button>
 
-						<paper-material elevation="1" class="button">
+						<paper-button elevation="1" class="button">
 							<p>Sell</p>
-						</paper-material>	
+						</paper-button>	
 					</div>
 				</div>
 
@@ -102,7 +112,14 @@
 
 	<script>
     	Polymer({
-      		is: 'place-order'
+      		is: 'place-order',
+      		ready: function() {
+				this.hideMaximum = false;
+      		},
+      		_handleChange: function(e) {
+      			this.hideMaximum = !this.hideMaximum;
+  
+      		}
     	});
   	</script>
 <dom-module/>

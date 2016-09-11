@@ -1,4 +1,4 @@
-<!-- Instructions: https://github.com/PolymerElements/iron-ajax/CONTRIBUTING.md#filing-issues -->
+<!-- Instructions: https://github.com/PolymerElements/paper-button/CONTRIBUTING.md#filing-issues -->
 ### Description
 <!-- Example: The `paper-foo` element causes the page to turn pink when clicked. -->
 
@@ -11,7 +11,7 @@
 <!-- Example: The page turns pink. -->
 
 ### Live Demo
-<!-- Example: https://jsbin.com/zeriha/2/edit?html,output -->
+<!-- Example: https://jsbin.com/cagaye/edit?html,output -->
 
 ### Steps to reproduce
 
