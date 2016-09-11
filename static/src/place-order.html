@@ -96,7 +96,7 @@
 					
 
 					<div class="buttons">
-						<paper-button elevation="1" class="button" on-tap="{{buyAction}}">
+						<paper-button elevation="1" class="button" on-tap="buyAction">
 							<p>Buy</p>
 						</paper-button>
 
@@ -139,11 +139,11 @@
       				val: this.amount,
       				price: this.price,
       				ticker: this.ticker,
-      				isMarket: hideMaximum,
+      				isMarket: this.hideMaximum,
       				userId: 0
       			}
 				
-				
+				console.log($);
       		}
     	});
   	</script>
