@@ -142,6 +142,7 @@ def sell():
     conn.commit()
 
     # call an algos.py function right here
+
     return jsonify({'status': 200, 'message': 'success :)'})
 
 
