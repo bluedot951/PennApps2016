@@ -21,6 +21,7 @@ Display Information
 from flask import Flask, abort, jsonify, request, send_from_directory, render_template
 from flask_restful import Resource, Api
 
+import random
 import psycopg2
 import urlparse
 from custom_json_encoder import CustomJsonEncoder
@@ -88,23 +89,47 @@ def get_price_history(ticker):
 def buy():
     if not request.json or 'vol' not in request.json \
         or 'price' not in request.json or 'ticker' not in request.json \
-        or 'isBuy' not in request.json or 'isMarket' not in request.json:
+        or 'userId' not in request.json or 'isMarket' not in request.json:
         abort(400)
     val = request.json['val']
     price = request.json['price']
     ticker = request.json['ticker']
-    isBuy = request.json['isBuy']
     isMarket = request.json['isMarket']
+    userId = request.json['userId']
+    id = random.randint(100000)
     cursor.execute(
-        'INSERT INTO "order"(id, val, price, ticker, isBuy, isMarket) VALUES '
-        '(%s, %s, %s, %s, %s, %s, %s)' % ('DEFAULT', val, price, ticker, isBuy, isMarket)
+        'INSERT INTO "order"(id, val, price, ticker, isBuy, isMarket, userId) VALUES '
+        '(%s, %s, %s, %s, %s, %s, %s)' % ('DEFAULT', val, price, ticker, 'TRUE', isMarket, userId)
     )
     cursor.execute(
         'INSERT INTO "priority_queue"(id, stamp, orderid) VALUES '
-        '( %s, %s, %s) ' % ('DEFAULT', 'now()', '')
+        '( %s, %s, %s) ' % ('DEFAULT', 'now()', id)
     )
     conn.commit()
-    return []
+    return jsonify({'status': 200, 'message': 'success :)'})
+
+@app.route('/sell/', methods=['POST'])
+def sell():
+    if not request.json or 'vol' not in request.json \
+        or 'price' not in request.json or 'ticker' not in request.json \
+        or 'isMarket' not in request.json:
+        abort(400)
+    val = request.json['val']
+    price = request.json['price']
+    ticker = request.json['ticker']
+    isMarket = request.json['isMarket']
+    id = random.randint(100000)
+    cursor.execute(
+        'INSERT INTO "order"(id, val, price, ticker, isBuy, isMarket) VALUES '
+        '(%s, %s, %s, %s, %s, %s, %s)' % ('DEFAULT', val, price, ticker, 'FALSE', isMarket)
+    )
+    cursor.execute(
+        'INSERT INTO "priority_queue"(id, stamp, orderid) VALUES '
+        '( %s, %s, %s) ' % ('DEFAULT', 'now()', id)
+    )
+    conn.commit()
+    return jsonify({'status': 200, 'message': 'success :)'})
+
 
 if __name__ == '__main__':
     app.run(debug=True)
