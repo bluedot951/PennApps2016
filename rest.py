@@ -141,7 +141,7 @@ def orderCallback(vol, price, ticker, isBuy, isMarket, userId):
     # create new order
     id = random.randint(0, 100000000)
     cursor.execute(
-        'INSERT INTO "order"(id, vol, price, ticker, isBuy, isMarket) VALUES '
+        'INSERT INTO "order"(id, vol, price, ticker, isbuy, ismarket) VALUES '
         '(%s, %s, %s, \'%s\', %s, %s, %s)' % ('DEFAULT', vol, price, ticker, isBuy, isMarket, userId)
     )
     conn.commit()
