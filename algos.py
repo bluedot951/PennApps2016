@@ -187,7 +187,7 @@ def execution(buyPQ, sellPQ, ledger):
                     removepqentry(sellPQ, j)
                 else:
                     transfer('to', HTSECheckingAccount, i.vol * j.price)
-                    transfer('from' '57d40d4ee63c5995587e8651', i.vol * j.price)
+                    transfer('from', '57d40d4ee63c5995587e8651', i.vol * j.price)
                     j.vol -= i.vol
                     i.vol = 0
                     ledger.append(i)

@@ -2,9 +2,7 @@ import threading
 from urllib import urlencode
 from urllib2 import Request, urlopen
 
-
-
-
+import time
 
 url = 'https://pennapps2k16.herokuapp.com/buy/' # Set destination URL here
 
@@ -35,24 +33,33 @@ penn_post_fields = {
 	"userId":0
 }
 
-def request1():
 
-  Request(url, urlencode(goog_post_fields).encode())
-  urlopen(request1).read().decode()
 
-def request2():
-  Request(url, urlencode(penn_post_fields).encode())
-  urlopen(request2).read().decode()
+request1 = Request(url, urlencode(goog_post_fields).encode())
+request2 = Request(url, urlencode(penn_post_fields).encode())
+request3 = Request(url, urlencode(gthb_post_fields).encode())
 
-def request3():
-  Request(url, urlencode(gthb_post_fields).encode())
-  urlopen(request3).read().decode()
-# request2 = Request(url, urlencode(penn_post_fields).encode())
-# request3 = Request(url, urlencode(gthb_post_fields).encode())
+def reset_timer():
+	time_since_trigger = time.time() * 1000
+	while time.time() * 1000 - time_since_trigger < RESET_TIME:
+		time.sleep(0.001)
+		Request(url, urlencode(goog_post_fields).encode())
+		json1 = urlopen(request1).read().decode()
+		print json1
 
-json = urlopen(request1).read().decode()
-print(json)
+		Request(url, urlencode(penn_post_fields).encode())
+		json2 = urlopen(request2).read().decode()
+		print json2
 
-threading.Thread(request1).start()
-threading.Thread(request2).start()
-threading.Thread(request3).start()
+		Request(url, urlencode(gthb_post_fields).encode())
+		json3 = urlopen(request3).read().decode()
+		print json3
+		time_since_trigger = time.time() * 1000
+
+
+# Reset Timer
+RESET_TIME = 10000
+time_since_trigger = 0
+reset_thread = threading.Thread(target=reset_timer)
+# reset_thread.daemon = True
+reset_thread.start()
