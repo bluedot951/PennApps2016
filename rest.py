@@ -29,7 +29,7 @@ from custom_json_encoder import CustomJsonEncoder
 import algos
 import urllib2
 import json
-import threading
+
 
 
 urlparse.uses_netloc.append("postgres")
@@ -235,6 +235,7 @@ def orderCallback(vol, price, ticker, isBuy, isMarket, userId):
     conn.commit()
 
     return jsonify({'status': 200, 'message': 'success :)'})
+    # return jsonify({'new_market_price' : new_market_price, 'date_of_update': datetime_of_update})
 
 
 if __name__ == '__main__':
