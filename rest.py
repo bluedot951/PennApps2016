@@ -26,7 +26,7 @@ import random
 import psycopg2
 import urlparse
 from custom_json_encoder import CustomJsonEncoder
-import Algos
+import algos
 
 urlparse.uses_netloc.append("postgres")
 url = urlparse.urlparse('postgres://gxspomxmufoybd:dskomEuwa9JYaxf8Jd7h8JYVKo@ec2-54-221-253-117.compute-1.amazonaws.com:5432/d62ndf8grb25cb')
@@ -101,49 +101,84 @@ def buy():
     print request
     if not request.json or 'vol' not in request.json \
         or 'price' not in request.json or 'ticker' not in request.json \
-        or 'userId' not in request.json or 'isMarket' not in request.json:
+        or 'isMarket' not in request.json or 'userId' not in request.json:
         abort(400)
     val = request.json['val']
     price = request.json['price']
     ticker = request.json['ticker']
     isMarket = request.json['isMarket']
     userId = request.json['userId']
-    id = random.randint(100000)
-    cursor.execute(
-        'INSERT INTO "order"(id, val, price, ticker, isBuy, isMarket, userId) VALUES '
-        '(%s, %s, %s, %s, %s, %s, %s)' % ('DEFAULT', val, price, ticker, 'TRUE', isMarket, userId)
-    )
-    cursor.execute(
-        'INSERT INTO "priority_queue"(id, stamp, orderid) VALUES '
-        '( %s, %s, %s) ' % ('DEFAULT', 'now()', id)
-    )
-    conn.commit()
-    return jsonify({'status': 200, 'message': 'success :)'})
+
+    return orderCallback(val, price, ticker, 'TRUE', isMarket, userId)
 
 @app.route('/sell/', methods=['POST'])
 def sell():
     if not request.json or 'vol' not in request.json \
         or 'price' not in request.json or 'ticker' not in request.json \
-        or 'isMarket' not in request.json:
+        or 'isMarket' not in request.json or 'userId' not in request.json:
         abort(400)
     val = request.json['val']
     price = request.json['price']
     ticker = request.json['ticker']
     isMarket = request.json['isMarket']
+    userId = request.json['userId']
+
+    return orderCallback(val, price, ticker, 'FALSE', isMarket, userId)
+
+def orderCallback(val, price, ticker, isBuy, isMarket, userId):
+    # collect past orders
+    cursor.execute(
+        'SELECT * FROM "order"'
+    )
+    old_orders = jsonify(cursor.fetchall())
+
+    # create new order
     id = random.randint(100000)
     cursor.execute(
         'INSERT INTO "order"(id, val, price, ticker, isBuy, isMarket) VALUES '
-        '(%s, %s, %s, %s, %s, %s, %s)' % ('DEFAULT', val, price, ticker, 'FALSE', isMarket)
-    )
-    cursor.execute(
-        'INSERT INTO "priority_queue"(id, stamp, orderid) VALUES '
-        '( %s, %s, %s) ' % ('DEFAULT', 'now()', id)
+        '(%s, %s, %s, %s, %s, %s, %s)' % ('DEFAULT', val, price, ticker, isBuy, isMarket, userId)
     )
     conn.commit()
+    cursor.execute(
+        'SELECT FROM "order" WHERE id = %s' % id
+    )
+    new_order = jsonify(cursor.fetchall())
+
+    # collect past general ledger history
+    cursor.execute(
+        'SELECT * FROM "ledger"'
+    )
+    gl = jsonify(cursor.fetchall())
+
+    # collect priority queue
+    cursor.execute(
+        'SELECT * FROM "priority_queue"'
+    )
+    pq = jsonify(cursor.fetchall())
+
 
     # call an algos.py function right here
+    new_market_price, datetime_of_update = algos.getData(pq, gl, old_orders, new_order)
 
-    return jsonify({'status': 200, 'message': 'success :)'})
+    # # update priority queue
+    # cursor.execute(
+    #     'INSERT INTO "priority_queue"(id, stamp, orderid) VALUES '
+    #     '( %s, %s, %s) ' % ('DEFAULT', 'now()', id)
+    # )
+    #
+    # # update price history
+    # cursor.execute(
+    #     'INSERT INTO "%s_price_history"(id, stamp, price) VALUES '
+    #     '( %s, %s, %s) ' % ('DEFAULT', 'now()', new_market_price)
+    # )
+    #
+    # # update user inventory
+    # if
+
+    conn.commit()
+
+    # return jsonify({'status': 200, 'message': 'success :)'})
+    return jsonify({'new_market_price' : new_market_price, 'date_of_update': datetime_of_update})
 
 
 if __name__ == '__main__':
