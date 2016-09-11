@@ -144,7 +144,7 @@ def orderCallback(vol, price, ticker, isBuy, isMarket, userId):
     )
     conn.commit()
     cursor.execute(
-        'SELECT FROM "order" WHERE id = %s' % id
+        'SELECT * FROM "order" WHERE id = %s;' % id
     )
     a = cursor.fetchall()
     print 'a'
@@ -156,7 +156,7 @@ def orderCallback(vol, price, ticker, isBuy, isMarket, userId):
 
     # collect past general ledger history
     cursor.execute(
-        'SELECT * FROM "ledger"'
+        'SELECT * FROM "ledger";'
     )
     a = cursor.fetchall()
     print 'a'
