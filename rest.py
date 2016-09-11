@@ -183,11 +183,11 @@ def orderCallback(vol, price, ticker, isBuy, isMarket, userId):
     )
 
     # update user inventory
-    if isBuy:
-        # increase user inventory, decrease from the central market
-        cursor.execute(
-            'UPDATE '
-        )
+    # if isBuy:
+    #     # increase user inventory, decrease from the central market
+    #     cursor.execute(
+    #         'UPDATE '
+    #     )
 
 
     conn.commit()
