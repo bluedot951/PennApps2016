@@ -260,7 +260,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           data.push(point[2]);
         }
         
-        this.lastItem = data[data.length - 1];
+        this.lastItem = Math.round(data[data.length - 1] * 100) / 100;
         var secondLastItem = date[data.length - 2];
         this.percentage = Math.round(Math.random() * 0.5 * 100) / 100;
         this.increasing = this.lastItem > secondLastItem ? true : false;
