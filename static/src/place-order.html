@@ -1,10 +1,10 @@
-<link rel="import" href="../bower_components/polymer/polymer.html">
+<html><head><link rel="import" href="../bower_components/polymer/polymer.html">
 <link rel="import" href="../bower_components/paper-input/paper-input.html">
 <link rel="import" href="../bower_components/paper-radio-group/paper-radio-group.html">
 <link rel="import" href="../bower_components/paper-button/paper-button.html">
 
 
-<dom-module id="place-order">
+</head><body><dom-module id="place-order">
 	<template>
 		<style>
 			:host {
@@ -90,7 +90,7 @@
 					</div>
 
 					<paper-radio-group selected="a" on-paper-radio-group-changed="_handleChange" aria-labelledby="Market/Limit">
-						<paper-radio-button name="a" >Limit</paper-radio-button>
+						<paper-radio-button name="a">Limit</paper-radio-button>
 						<paper-radio-button name="b">Market</paper-radio-button>
 					</paper-radio-group>
 					
@@ -111,66 +111,7 @@
 	</template>
 
 
-<!-- {
-	
-	"vol": amount,
-	"price": price,
-	"ticker":ticker,
-	"isMarket":hideMaximum,
-	"userId":0
-} -->
 
-	<script>
-    	Polymer({
-      		is: 'place-order',
-      		properties: {
-      			ticker: {
-      				type: String
-      			}
-      		},
-      		ready: function() {
-				this.hideMaximum = false;
-      		},
-      		_handleChange: function(e) {
-      			this.hideMaximum = !this.hideMaximum;
-      		},
-      		buyAction: function(e) {
-      			var data = {
-      				val: this.amount,
-      				price: this.price,
-      				ticker: this.ticker,
-      				isMarket: this.hideMaximum,
-      				userId: 0
-      			}
-				
-				$.ajax({
-				  type: "POST",
-				  url: '/buy',
-				  data: data,
-				  success: function(data) {
-					console.log(data);
-				  }
-				});
-      		},
 
-      		sellAction: function(e) {
-      			var data = {
-      				val: this.amount,
-      				price: this.price,
-      				ticker: this.ticker,
-      				isMarket: this.hideMaximum,
-      				userId: 0
-      			}
-				
-				$.ajax({
-				  type: "POST",
-				  url: '/sell',
-				  data: data,
-				  success: function(data) {
-					console.log(data);
-				  }
-				});
-      		}
-    	});
-  	</script>
-<dom-module/>
+	<script>Polymer({is:"place-order",properties:{ticker:{type:String}},ready:function(){this.hideMaximum=!1},_handleChange:function(i){this.hideMaximum=!this.hideMaximum},buyAction:function(i){var e={val:this.amount,price:this.price,ticker:this.ticker,isMarket:this.hideMaximum,userId:0};$.ajax({type:"POST",url:"/buy",data:e,success:function(i){console.log(i)}})},sellAction:function(i){var e={val:this.amount,price:this.price,ticker:this.ticker,isMarket:this.hideMaximum,userId:0};$.ajax({type:"POST",url:"/sell",data:e,success:function(i){console.log(i)}})}});</script>
+<dom-module></dom-module></dom-module></body></html>

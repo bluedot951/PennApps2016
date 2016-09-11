@@ -1,0 +1,331 @@
+<!--
+@license
+Copyright (c) 2016 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/app-layout/app-drawer/app-drawer.html">
+<link rel="import" href="../bower_components/app-layout/app-drawer-layout/app-drawer-layout.html">
+<link rel="import" href="../bower_components/app-layout/app-header/app-header.html">
+<link rel="import" href="../bower_components/app-layout/app-header-layout/app-header-layout.html">
+<link rel="import" href="../bower_components/app-layout/app-scroll-effects/app-scroll-effects.html">
+<link rel="import" href="../bower_components/app-layout/app-toolbar/app-toolbar.html">
+<link rel="import" href="../bower_components/app-route/app-location.html">
+<link rel="import" href="../bower_components/app-route/app-route.html">
+<link rel="import" href="../bower_components/iron-pages/iron-pages.html">
+<link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="../bower_components/iron-selector/iron-selector.html">
+<link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../bower_components/paper-material/paper-material.html">
+<link rel="import" href="my-icons.html">
+<link rel="import" href="search-bar.html">
+<link rel="import" href="info-card.html">
+<link rel="import" href="place-order.html">
+<link rel="import" href="my-account.html">
+<link rel="import" href="../bower_components/chart-elements/chart-line.html">
+
+<dom-module id="my-app">
+  <!-- <iron-ajax auto url="/price_history/GOOG" handle-as="json" last-response="{{ajaxResponse}}"></iron-ajax> -->
+  <template>
+    <iron-ajax
+    auto
+    url="/price_history/{{sticker}}"
+    handle-as="json"
+    on-response="handleResponse"
+    debounce-duration="300"></iron-ajax>
+
+    <iron-ajax
+    auto
+    url="/entity/"
+    handle-as="json"
+    on-response="handleAccResponse"
+    debounce-duration="300"></iron-ajax>
+
+    <iron-ajax
+    auto
+    url="/balance"
+    handle-as="json"
+    on-response="handleBalanceResponse"
+    debounce-duration="300"></iron-ajax>
+
+    <iron-ajax
+    auto
+    url="/inventory/1"
+    handle-as="json"
+    on-response="handleInventoryResponse"
+    debounce-duration="300"></iron-ajax>
+    <style>
+      :host {
+        --app-primary-color: #171D43;
+        --app-secondary-color: #f5f5f5;
+        --app-highlight-color: #f44336;
+        --app-text-color: #b1b1b1;
+
+      }
+
+      app-header {
+        padding: 10px; 
+        color: var(--app-text-color);
+      }
+      app-header paper-icon-button {
+        --paper-icon-button-ink-color: white;
+      }
+
+      app-drawer {
+
+        --app-drawer-content-container: {
+          background-color: var(--app-primary-color);
+          display: flex;
+          flex-flow: column nowrap;
+          color: #fff;
+        }
+      }
+
+      .title {
+
+          font-size: 2em;
+          margin: 5vh 20px;
+          margin-bottom: 10vh;
+          max-width: 150px;
+
+      }
+
+      .inventory {
+        display: inline-block;
+        padding-bottom: 5px;
+
+        margin: 0 20px;
+        margin-bottom: 20px;
+        border-bottom: 3px solid var(--app-highlight-color);
+        font-size: 1.4em;
+      }
+      .drawer-list {
+        margin: 0 20px;
+      }
+
+      .drawer-list a {
+        display: block;
+
+        padding: 0 16px;
+
+        text-decoration: none;
+
+        color: var(--app-secondary-color);
+
+        line-height: 40px;
+      }
+
+      .drawer-list a.iron-selected {
+        font-weight: bold;
+      }
+
+      .chart-base {
+        width: 80%;
+        max-width: 750px;
+
+        display: block;
+        margin: 0 auto;
+        margin-top: 30px;
+        background-color: #fff;
+      }
+
+      .chart {
+        display: block;
+        padding: 10px;
+
+      }
+
+      .sticker {
+        width: 80%;
+        display: block;
+        margin: 0 auto;
+        font-weight: 300;
+      }
+
+      .count {
+        margin: 0 auto;
+      }
+
+      .row {
+        display: flex;
+
+      }
+    </style>
+
+    <app-location route="{{route}}"></app-location>
+    <app-route
+        route="{{route}}"
+        pattern="/:page"
+        data="{{routeData}}"
+        tail="{{subroute}}"></app-route>
+
+    <app-drawer-layout fullbleed>
+      <!-- Drawer content -->
+      <app-drawer>
+        
+        <div class="title">THE STICKER EXCHANGE</div>
+        <my-account name="{{name}}" balance="{{balance}}"></my-account>
+
+        <div class="inventory">
+          Inventory
+        </div>
+        <iron-selector selected="{{sticker}}" attr-for-selected="name" class="drawer-list" role="navigation">
+
+          <template is="dom-repeat" items="{{inventory}}">
+            <div name="{{item.ticker}}" class="row">
+                <h3  class="sticker">{{item.ticker}}</h3>
+                <h3 class="count">{{item.count}}</h3>
+            </div>
+          </template>
+
+<!--           <h3 name="GOOG" class="sticker">GOOG</h3>
+          <h3 name="PENN" class="sticker">PENN</h3> -->
+        </iron-selector>
+      </app-drawer>
+
+      <!-- Main content -->
+      <app-header-layout has-scrolling-region>
+
+        <app-header>
+            <paper-icon-button icon="menu" drawer-toggle></paper-icon-button>
+        </app-header>
+
+        <search-bar></search-bar>
+
+        <info-card name="{{sticker}}" value="{{lastItem}}" increasing={{increasing}} percentage="{{percentage}}"></info-card>
+
+        <paper-material class="chart-base" elevation="2" id="chartBase">
+          <chart-line data="{{data}}" class="chart"></chart-line>
+        </paper-material> 
+        
+        <place-order ticker="{{sticker}}"></place-order>
+        
+      </app-header-layout>
+    </app-drawer-layout>
+  </template>
+
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('/service-worker.js');
+    }
+
+    function interpolate(x) {
+      var x0 = 512, y0 = 15;
+      var x1 = 750, y1 = 30;
+
+      var result = Math.round(y0 + ((y1 - y0) * ((x - x0)/(x1 - x0))));
+      if (result < 10)
+        return 10;
+      else if (result > 30)
+        return 30
+      else 
+        return result;
+    }
+    Polymer({
+      is: 'my-app',
+
+      properties: {
+        sticker: {
+          type: String,
+          value: 'GTHB',
+          observer: '_stickerChanged'
+        }
+      },
+
+      _stickerChanged: function(sticker) {
+        console.log(sticker);
+      },
+      handleResponse: function(e, xhr) {
+        var rawData = xhr.response;
+
+        var labels = [];
+        var data = [];
+          
+        var width = this.$.chartBase.offsetWidth;
+
+        var numPoints = interpolate(width);
+        
+        for (var i = 0 ; i <= numPoints; i++) {
+          var point = rawData[i];
+          var date = new Date(point[1]);
+          var hour = date.getHours();
+          var minutes = date.getMinutes() > 9? date.getMinutes() : '0' + date.getMinutes();
+
+          labels.push(hour + ':' + minutes );
+          data.push(point[2]);
+        }
+        
+        this.lastItem = Math.round(data[data.length - 1] * 100) / 100;
+        var secondLastItem = date[data.length - 2];
+        this.percentage = Math.round(Math.random() * 0.5 * 100) / 100;
+        this.increasing = this.lastItem > secondLastItem ? true : false;
+
+        this.data = {
+          labels: labels,
+          datasets: [
+            {
+              label: "Value over Time",
+              lineTension: 0,
+              backgroundColor: "rgba(151,187,205,0.2)",
+              borderColor: "rgba(151,187,205,1)",
+              borderWidth: 1,
+              pointBackgroundColor: "rgba(151,187,205,1)",
+              pointBorderColor: "#fff",
+              pointHighlightFill: "#fff",
+              pointHoverBorderColor: "rgba(151,187,205,1)",
+              data: data,
+            }
+          ]
+        };
+      },
+      handleAccResponse: function(e, xhr) {
+        var rawData = xhr.response;
+        var acc = rawData[0];
+
+        this.name = acc[1];
+      },
+      handleBalanceResponse: function(e, xhr) {
+        console.log(xhr.response);
+        this.balance = xhr.response
+      },
+      handleInventoryResponse: function(e, xhr) {
+        var inventory = [];
+
+        for (var i = 0; i < xhr.response.length; i++) {
+          var item = xhr.response[i];
+          inventory.push({
+            ticker: item[2],
+            count: item[3]
+          })
+        }
+        this.inventory = inventory;
+      } 
+      // ready: function() {
+
+      // this.data = {
+      //     labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun"],
+      //     datasets: [
+      //       {
+      //         label: "Value over Time",
+      //         lineTension: 0,
+      //         backgroundColor: "rgba(151,187,205,0.2)",
+      //         borderColor: "rgba(151,187,205,1)",
+      //         borderWidth: 1,
+      //         pointBackgroundColor: "rgba(151,187,205,1)",
+      //         pointBorderColor: "#fff",
+      //         pointHighlightFill: "#fff",
+      //         pointHoverBorderColor: "rgba(151,187,205,1)",
+      //         data: [28, 48, 40, 19, 86, 27],
+      //       }
+      //     ]
+      //   };
+      // }
+    });
+    
+  </script>
+</dom-module>

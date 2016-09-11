@@ -1,9 +1,9 @@
-<link rel="import" href="../bower_components/polymer/polymer.html">
+<html><head><link rel="import" href="../bower_components/polymer/polymer.html">
 <link rel="import" href="../bower_components/paper-material/paper-material.html">
 <link rel="import" href="../bower_components/iron-icon/iron-icon.html">
 <link rel="import" href="../bower_components/iron-icons/iron-icons.html">
 
-<dom-module id="info-card">
+</head><body><dom-module id="info-card">
 	<template>
 		<style>
 			:host {
@@ -49,51 +49,13 @@
 		</style>
 
 		<paper-material elevation="2" class="card">
-            <h4 class="text">{{name}}</h5>
-            <h4 class="text">{{value}}</h5>
-            <iron-icon id="icon" icon="{{icon}}" class$={{iconClass}}></iron-icon>
-            <h4 class$={{textClass}} >{{percentage}}%</h5>
+            <h4 class="text">{{name}}</h4>
+            <h4 class="text">{{value}}</h4>
+            <iron-icon id="icon" icon="{{icon}}" class$="{{iconClass}}"></iron-icon>
+            <h4 class$="{{textClass}}">{{percentage}}%</h4>
         </paper-material>
 
 	</template>
 
-	<script>
-    	Polymer({
-      		is: 'info-card',
-      		properties: {
-      			name: {
-      				type: String
-      			},
-      			value: {
-      				type: Number,
-      				value: 'test'
-      			},
-      			increasing: {
-      				type: Boolean
-      			},
-      			percentage: {
-      				type: Number
-      			},
-      		},
-      		icon: function() {
-      			if (this.increasing)
-					return 'icons:arrow-upward'
-				else 
-					return 'icons:arrow-downward'
-      		},
-      		ready: function() {
-
-      			if (this.increasing) {
-      				this.textClass = 'text increasing'
-      				this.icon = 'icons:arrow-upward'
-      				this.iconClass = 'icon increasing'
-      			}
-      			else {
-      				this.textClass = 'text decreasing'
-      				this.icon = 'icons:arrow-downward'	
-      				this.iconClass = 'icon decreasing'		
-      			}
-      		}
-    	});
-  	</script>
-<dom-module/>
+	<script>Polymer({is:"info-card",properties:{name:{type:String},value:{type:Number,value:"test"},increasing:{type:Boolean},percentage:{type:Number}},icon:function(){return this.increasing?"icons:arrow-upward":"icons:arrow-downward"},ready:function(){this.increasing?(this.textClass="text increasing",this.icon="icons:arrow-upward",this.iconClass="icon increasing"):(this.textClass="text decreasing",this.icon="icons:arrow-downward",this.iconClass="icon decreasing")}});</script>
+<dom-module></dom-module></dom-module></body></html>
