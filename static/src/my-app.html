@@ -18,6 +18,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/app-route/app-location.html">
 <link rel="import" href="../bower_components/app-route/app-route.html">
 <link rel="import" href="../bower_components/iron-pages/iron-pages.html">
+<link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
 <link rel="import" href="../bower_components/iron-selector/iron-selector.html">
 <link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="../bower_components/paper-material/paper-material.html">
@@ -29,7 +30,15 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/chart-elements/chart-line.html">
 
 <dom-module id="my-app">
+  <!-- <iron-ajax auto url="/price_history/GOOG" handle-as="json" last-response="{{ajaxResponse}}"></iron-ajax> -->
   <template>
+    <iron-ajax
+    auto
+    url="/price_history/GOOG"
+    handle-as="json"
+    on-response="handleResponse"
+    debounce-duration="300"></iron-ajax>
+
     <style>
       :host {
         --app-primary-color: #171D43;
@@ -181,11 +190,20 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         console.log(page)
         this.page = page || '';
       },
+      handleResponse: function(e, xhr) {
+        var rawData = xhr.response;
+        console.log(rawData);
+        var labels = [];
+        var data = [];
 
 
-      ready: function() {
-      this.data = {
-          labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun"],
+        rawData.forEach(function(point) {
+          labels.push(point[1]);
+          data.push(point[2]);
+        })
+
+        this.data = {
+          labels: labels,
           datasets: [
             {
               label: "Value over Time",
@@ -197,11 +215,32 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
               pointBorderColor: "#fff",
               pointHighlightFill: "#fff",
               pointHoverBorderColor: "rgba(151,187,205,1)",
-              data: [28, 48, 40, 19, 86, 27],
+              data: data,
             }
           ]
         };
-      }
+      },
+
+      // ready: function() {
+
+      // this.data = {
+      //     labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun"],
+      //     datasets: [
+      //       {
+      //         label: "Value over Time",
+      //         lineTension: 0,
+      //         backgroundColor: "rgba(151,187,205,0.2)",
+      //         borderColor: "rgba(151,187,205,1)",
+      //         borderWidth: 1,
+      //         pointBackgroundColor: "rgba(151,187,205,1)",
+      //         pointBorderColor: "#fff",
+      //         pointHighlightFill: "#fff",
+      //         pointHoverBorderColor: "rgba(151,187,205,1)",
+      //         data: [28, 48, 40, 19, 86, 27],
+      //       }
+      //     ]
+      //   };
+      // }
     });
     
   </script>
