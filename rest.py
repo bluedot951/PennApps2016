@@ -99,17 +99,23 @@ def get_price_history(ticker):
 @app.route('/buy/', methods=['POST'])
 def buy():
     print request
-    if not request.json or 'vol' not in request.json \
-        or 'price' not in request.json or 'ticker' not in request.json \
-        or 'isMarket' not in request.json or 'userId' not in request.json:
-        abort(400)
-    val = request.json['val']
+    print request.json
+    print 'vol' in request.json
+    print 'price' in request.json
+    print 'ticker' in request.json
+    print 'isMarket' in request.json
+    print 'userId' in request.json
+    # if not request.json or 'vol' not in request.json \
+    #     or 'price' not in request.json or 'ticker' not in request.json \
+    #     or 'isMarket' not in request.json or 'userId' not in request.json:
+    #     abort(400)
+    vol = request.json['vol']
     price = request.json['price']
     ticker = request.json['ticker']
     isMarket = request.json['isMarket']
     userId = request.json['userId']
 
-    return orderCallback(val, price, ticker, 'TRUE', isMarket, userId)
+    return orderCallback(vol, price, ticker, 'TRUE', isMarket, userId)
 
 @app.route('/sell/', methods=['POST'])
 def sell():
@@ -117,15 +123,15 @@ def sell():
         or 'price' not in request.json or 'ticker' not in request.json \
         or 'isMarket' not in request.json or 'userId' not in request.json:
         abort(400)
-    val = request.json['val']
+    vol = request.json['vol']
     price = request.json['price']
     ticker = request.json['ticker']
     isMarket = request.json['isMarket']
     userId = request.json['userId']
 
-    return orderCallback(val, price, ticker, 'FALSE', isMarket, userId)
+    return orderCallback(vol, price, ticker, 'FALSE', isMarket, userId)
 
-def orderCallback(val, price, ticker, isBuy, isMarket, userId):
+def orderCallback(vol, price, ticker, isBuy, isMarket, userId):
     # collect past orders
     cursor.execute(
         'SELECT * FROM "order"'
@@ -133,10 +139,10 @@ def orderCallback(val, price, ticker, isBuy, isMarket, userId):
     old_orders = jsonify(cursor.fetchall())
 
     # create new order
-    id = random.randint(100000)
+    id = random.randint(0, 100000000)
     cursor.execute(
-        'INSERT INTO "order"(id, val, price, ticker, isBuy, isMarket) VALUES '
-        '(%s, %s, %s, %s, %s, %s, %s)' % ('DEFAULT', val, price, ticker, isBuy, isMarket, userId)
+        'INSERT INTO "order"(id, vol, price, ticker, isbuy, ismarket) VALUES '
+        '(%s, %s, %s, \'%s\', %s, %s, %s)' % ('DEFAULT', vol, price, ticker, isBuy, isMarket, userId)
     )
     conn.commit()
     cursor.execute(
