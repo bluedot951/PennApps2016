@@ -59,7 +59,10 @@ class Order:
 def getData(pq, all_orders, ledger, new_order):
 
     o = Order()
-
+    print pq
+    print all_orders
+    print ledger
+    print new_order
     o.u = new_order[3]
     o.id = new_order[0]
     o.t = new_order[4]
@@ -79,12 +82,14 @@ def getData(pq, all_orders, ledger, new_order):
     SPQ = []
 
     for p in pq:
+        print p
         orderID = p[2] # reverse lookup for side
         myOrder = None
 
         isBuy = False
 
         for order in all_orders:
+            print order
             if order[0] == orderID:
                 isBuy = order[5]
 
@@ -105,7 +110,7 @@ def getData(pq, all_orders, ledger, new_order):
 
     return (pq, ledger)
 
-    """ This takes pq, order, and ledger queries from rest.py to calculate market data"""
+    # This takes pq, order, and ledger queries from rest.py to calculate market data
     # pq ~ [ [id, timestamp, orderId], ..., ... ]
     # order ~ [id, price, volume, userId, ticker, isBuy, isMarket]
     # all_orders = listof (orders)
