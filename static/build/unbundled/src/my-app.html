@@ -27,6 +27,8 @@
     <iron-ajax auto="" url="/entity/" handle-as="json" on-response="handleAccResponse" debounce-duration="300"></iron-ajax>
 
     <iron-ajax auto="" url="/balance" handle-as="json" on-response="handleBalanceResponse" debounce-duration="300"></iron-ajax>
+
+    <iron-ajax auto="" url="/inventory/1" handle-as="json" on-response="handleInventoryResponse" debounce-duration="300"></iron-ajax>
     <style>
       :host {
         --app-primary-color: #171D43;
@@ -111,8 +113,17 @@
       .sticker {
         width: 80%;
         display: block;
-        margin: auto;
+        margin: 0 auto;
         font-weight: 300;
+      }
+
+      .count {
+        margin: 0 auto;
+      }
+
+      .row {
+        display: flex;
+
       }
     </style>
 
@@ -130,9 +141,15 @@
           Inventory
         </div>
         <iron-selector selected="{{sticker}}" attr-for-selected="name" class="drawer-list" role="navigation">
-              <h3 name="GTHB" class="sticker">GTHB</h3>
-              <h3 name="GOOG" class="sticker">GOOG</h3>
-              <h3 name="PENN" class="sticker">PENN</h3>
+
+          <template is="dom-repeat" items="{{inventory}}">
+            <div name="{{item.ticker}}" class="row">
+                <h3 class="sticker">{{item.ticker}}</h3>
+                <h3 class="count">{{item.count}}</h3>
+            </div>
+          </template>
+
+
         </iron-selector>
       </app-drawer>
 
@@ -145,18 +162,18 @@
 
         <search-bar></search-bar>
 
-        <info-card name="{{sticker}}" value="0.36" increasing="" percentage="0.02"></info-card>
+        <info-card name="{{sticker}}" value="{{lastItem}}" increasing="{{increasing}}" percentage="{{percentage}}"></info-card>
 
         <paper-material class="chart-base" elevation="2" id="chartBase">
           <chart-line data="{{data}}" class="chart"></chart-line>
         </paper-material> 
         
-        <place-order></place-order>
+        <place-order ticker="{{sticker}}"></place-order>
         
       </app-header-layout>
     </app-drawer-layout>
   </template>
 
-  <script>function interpolate(e){var r=512,o=15,n=750,t=30,s=Math.round(o+(t-o)*((e-r)/(n-r)));return s<10?10:s>30?30:s}"serviceWorker"in navigator&&navigator.serviceWorker.register("/service-worker.js"),Polymer({is:"my-app",properties:{sticker:{type:String,value:"GTHB",observer:"_stickerChanged"}},_stickerChanged:function(e){console.log(e)},handleResponse:function(e,r){var o=r.response,n=[],t=[],s=this.$.chartBase.offsetWidth,a=interpolate(s);console.log(a);for(var i=0;i<=a;i++){var l=o[i],c=new Date(l[1]),g=c.getHours(),p=c.getMinutes()>9?c.getMinutes():"0"+c.getMinutes();n.push(g+":"+p),t.push(l[2])}this.data={labels:n,datasets:[{label:"Value over Time",lineTension:0,backgroundColor:"rgba(151,187,205,0.2)",borderColor:"rgba(151,187,205,1)",borderWidth:1,pointBackgroundColor:"rgba(151,187,205,1)",pointBorderColor:"#fff",pointHighlightFill:"#fff",pointHoverBorderColor:"rgba(151,187,205,1)",data:t}]}},handleAccResponse:function(e,r){var o=r.response,n=o[0];this.name=n[1]},handleBalanceResponse:function(e,r){console.log(r.response),this.balance=r.response}});</script>
+  <script>function interpolate(e){var r=512,n=15,o=750,t=30,s=Math.round(n+(t-n)*((e-r)/(o-r)));return s<10?10:s>30?30:s}"serviceWorker"in navigator&&navigator.serviceWorker.register("/service-worker.js"),Polymer({is:"my-app",properties:{sticker:{type:String,value:"GTHB",observer:"_stickerChanged"}},_stickerChanged:function(e){console.log(e)},handleResponse:function(e,r){for(var n=r.response,o=[],t=[],s=this.$.chartBase.offsetWidth,a=interpolate(s),i=0;i<=a;i++){var l=n[i],h=new Date(l[1]),c=h.getHours(),g=h.getMinutes()>9?h.getMinutes():"0"+h.getMinutes();o.push(c+":"+g),t.push(l[2])}this.lastItem=Math.round(100*t[t.length-1])/100;var p=h[t.length-2];this.percentage=Math.round(.5*Math.random()*100)/100,this.increasing=this.lastItem>p,this.data={labels:o,datasets:[{label:"Value over Time",lineTension:0,backgroundColor:"rgba(151,187,205,0.2)",borderColor:"rgba(151,187,205,1)",borderWidth:1,pointBackgroundColor:"rgba(151,187,205,1)",pointBorderColor:"#fff",pointHighlightFill:"#fff",pointHoverBorderColor:"rgba(151,187,205,1)",data:t}]}},handleAccResponse:function(e,r){var n=r.response,o=n[0];this.name=o[1]},handleBalanceResponse:function(e,r){console.log(r.response),this.balance=r.response},handleInventoryResponse:function(e,r){for(var n=[],o=0;o<r.response.length;o++){var t=r.response[o];n.push({ticker:t[2],count:t[3]})}this.inventory=n}});</script>
 </dom-module>
 </body></html>

@@ -85,8 +85,8 @@
 
 				<div class="row">
 					<div class="col">
-						<paper-input label="Amount"></paper-input>
-						<paper-input hidden$="{{hideMaximum}}" label="Price"></paper-input>
+						<paper-input label="Amount" value="{{amount}}"></paper-input>
+						<paper-input hidden$="{{hideMaximum}}" label="Price" value="{{price}}"></paper-input>
 					</div>
 
 					<paper-radio-group selected="a" on-paper-radio-group-changed="_handleChange" aria-labelledby="Market/Limit">
@@ -96,11 +96,11 @@
 					
 
 					<div class="buttons">
-						<paper-button elevation="1" class="button">
+						<paper-button elevation="1" class="button" on-tap="buyAction">
 							<p>Buy</p>
 						</paper-button>
 
-						<paper-button elevation="1" class="button">
+						<paper-button elevation="1" class="button" on-tap="sellAction">
 							<p>Sell</p>
 						</paper-button>	
 					</div>
@@ -110,5 +110,8 @@
 
 	</template>
 
-	<script>Polymer({is:"place-order",ready:function(){this.hideMaximum=!1},_handleChange:function(i){this.hideMaximum=!this.hideMaximum}});</script>
+
+
+
+	<script>Polymer({is:"place-order",properties:{ticker:{type:String}},ready:function(){this.hideMaximum=!1},_handleChange:function(i){this.hideMaximum=!this.hideMaximum},buyAction:function(i){var e={val:this.amount,price:this.price,ticker:this.ticker,isMarket:this.hideMaximum,userId:0};$.ajax({type:"POST",url:"/buy",data:e,success:function(i){console.log(i)}})},sellAction:function(i){var e={val:this.amount,price:this.price,ticker:this.ticker,isMarket:this.hideMaximum,userId:0};$.ajax({type:"POST",url:"/sell",data:e,success:function(i){console.log(i)}})}});</script>
 <dom-module></dom-module></dom-module></body></html>

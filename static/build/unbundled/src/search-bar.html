@@ -8,13 +8,9 @@
 				margin: auto;
 				width: 80%;
 				border: 2px solid var(--app-text-color);
-				padding: 10px;
+				padding: 5px 10px;
 			}
 			
-			 {
-				background: transparent;
-				border: none;
-			}
 			.search-string {
 				margin: 0;
 				padding: 0;
@@ -22,10 +18,18 @@
 				font-size: 1.2em;
 				color: var(--app-text-color);
 			}
+			input {
+				width: 100%;
+				background: none;
+				border: none;
+			}
+			input:focus {
+			    outline:none;
+			}
 		</style>
 		
-		<input value="{{query::input}}">
-		
+		<input value="{{query::input}}" placeholder="Search Stickers...">
+
 
 	</template>
 
