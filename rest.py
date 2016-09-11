@@ -26,6 +26,7 @@ import random
 import psycopg2
 import urlparse
 from custom_json_encoder import CustomJsonEncoder
+import Algos
 
 urlparse.uses_netloc.append("postgres")
 url = urlparse.urlparse('postgres://gxspomxmufoybd:dskomEuwa9JYaxf8Jd7h8JYVKo@ec2-54-221-253-117.compute-1.amazonaws.com:5432/d62ndf8grb25cb')
@@ -76,6 +77,13 @@ def get_ledgers():
     )
     return jsonify(cursor.fetchall())
 
+@app.route('/priority_queue/', methods=['GET'])
+def get_ledgers():
+    cursor.execute(
+        'SELECT * FROM "priority_queue"'
+    )
+    return jsonify(cursor.fetchall())
+
 
 
 @app.route('/price_history/<string:ticker>', methods=['GET'])
@@ -86,8 +94,11 @@ def get_price_history(ticker):
     # print cursor.fetchall()
     return jsonify(cursor.fetchall())
 
+
+
 @app.route('/buy/', methods=['POST'])
 def buy():
+    print request
     if not request.json or 'vol' not in request.json \
         or 'price' not in request.json or 'ticker' not in request.json \
         or 'userId' not in request.json or 'isMarket' not in request.json:
@@ -129,6 +140,8 @@ def sell():
         '( %s, %s, %s) ' % ('DEFAULT', 'now()', id)
     )
     conn.commit()
+
+    # call an algos.py function right here
     return jsonify({'status': 200, 'message': 'success :)'})
 
 
