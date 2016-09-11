@@ -131,10 +131,10 @@ def buy():
 
 @app.route('/sell/', methods=['POST'])
 def sell():
-    if not request.json or 'vol' not in request.json \
-        or 'price' not in request.json or 'ticker' not in request.json \
-        or 'isMarket' not in request.json or 'userId' not in request.json:
-        abort(400)
+    # if not request.json or 'vol' not in request.json \
+    #     or 'price' not in request.json or 'ticker' not in request.json \
+    #     or 'isMarket' not in request.json or 'userId' not in request.json:
+    #     abort(400)
     vol = request.json['vol']
     price = request.json['price']
     ticker = request.json['ticker']
@@ -183,32 +183,56 @@ def orderCallback(vol, price, ticker, isBuy, isMarket, userId):
     print pq
 
     # call an algos.py function right here
-    new_market_price, datetime_of_update = algos.getData(pq, old_orders, gl, new_order[0])
-    print 'new market price'
-    print new_market_price
+    # update ledger
+    # and update pq
+    new_pq, new_ledger = algos.getData(pq, old_orders, gl, new_order[0])
+    print 'new pq'
+    print new_pq
 
-    print 'datetime of update'
-    print datetime_of_update
+    print 'new ledger'
+    print new_ledger
+
     # update priority queue
     cursor.execute(
-        'INSERT INTO "priority_queue"(id, stamp, orderid) VALUES '
-        '( %s, %s, %s) ' % ('DEFAULT', 'now()', id)
+        'DELETE TABLE "priority_queue" *'
     )
+    conn.commit()
+    for order in new_pq:
+        cursor.execute(
+            'INSERT INTO "priority_queue"(id, stamp, orderid) VALUES '
+            '( %s, %s, %s) ' % ('DEFAULT', 'now()', order['id'])
+        )
 
-    # update price history
+    # update ledger
     cursor.execute(
-        'INSERT INTO "%s_price_history"(id, stamp, price) VALUES '
-        '( %s, %s, %s) ' % ('DEFAULT', 'now()', new_market_price)
+        'DELETE TABLE "ledger" *'
     )
+    conn.commit()
+    for l in new_ledger:
+        cursor.execute(
+            'INSERT INTO "ledger"(id, stamp, orderid) VALUES '
+            '( %s, %s, %s) ' % ('DEFAULT', 'now()', l['id'])
+        )
+
+    #
+    # # update price history
+    # cursor.execute(
+    #     'INSERT INTO "%s_price_history"(id, stamp, price) VALUES '
+    #     '( %s, %s, %s) ' % ('DEFAULT', 'now()', new_market_price)
+    # )
 
     # update user inventory
-    # if isBuy:
-    #     # increase user inventory, decrease from the central market
-    #     cursor.execute(
-    #         'UPDATE '
-    #     )
+    operation = '+' if isBuy else '-'
 
-
+    # increase user inventory, decrease from the central market
+    cursor.execute(
+        'UPDATE "inventory" SET count = count %s %s WHERE userid = 2 AND ticker = \'%s\''
+        % (operation, vol, ticker)
+    )
+    cursor.execute(
+        'UPDATE "inventory" SET count = count %s %s WHERE userid = 2 AND ticker = \'%s\''
+        % (operation, vol, ticker)
+    )
     conn.commit()
 
     return jsonify({'status': 200, 'message': 'success :)'})
