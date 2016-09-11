@@ -203,7 +203,7 @@ def orderCallback(vol, price, ticker, isBuy, isMarket, userId):
     for order in new_pq:
         cursor.execute(
             'INSERT INTO "priority_queue"(id, stamp, orderid) VALUES '
-            '( %s, %s, %s) ' % ('DEFAULT', 'now()', order['id'])
+            '( %s, %s, %s) ' % ('DEFAULT', 'now()', order.id)
         )
 
     # update ledger
@@ -214,7 +214,7 @@ def orderCallback(vol, price, ticker, isBuy, isMarket, userId):
     for l in new_ledger:
         cursor.execute(
             'INSERT INTO "ledger"(id, stamp, orderid) VALUES '
-            '( %s, %s, %s) ' % ('DEFAULT', 'now()', l['id'])
+            '( %s, %s, %s) ' % ('DEFAULT', 'now()', l.id)
         )
 
     #
