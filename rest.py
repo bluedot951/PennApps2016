@@ -99,10 +99,16 @@ def get_price_history(ticker):
 @app.route('/buy/', methods=['POST'])
 def buy():
     print request
-    if not request.json or 'vol' not in request.json \
-        or 'price' not in request.json or 'ticker' not in request.json \
-        or 'isMarket' not in request.json or 'userId' not in request.json:
-        abort(400)
+    print request.json
+    print 'val' in request.json
+    print 'price' in request.json
+    print 'ticker' in request.json
+    print 'isMarket' in request.json
+    print 'userId' in request.json
+    # if not request.json or 'vol' not in request.json \
+    #     or 'price' not in request.json or 'ticker' not in request.json \
+    #     or 'isMarket' not in request.json or 'userId' not in request.json:
+    #     abort(400)
     val = request.json['val']
     price = request.json['price']
     ticker = request.json['ticker']
