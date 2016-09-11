@@ -98,13 +98,6 @@ def get_price_history(ticker):
 
 @app.route('/buy/', methods=['POST'])
 def buy():
-    print request
-    print request.json
-    print 'vol' in request.json
-    print 'price' in request.json
-    print 'ticker' in request.json
-    print 'isMarket' in request.json
-    print 'userId' in request.json
     # if not request.json or 'vol' not in request.json \
     #     or 'price' not in request.json or 'ticker' not in request.json \
     #     or 'isMarket' not in request.json or 'userId' not in request.json:
@@ -136,35 +129,43 @@ def orderCallback(vol, price, ticker, isBuy, isMarket, userId):
     cursor.execute(
         'SELECT * FROM "order"'
     )
-    old_orders = jsonify(cursor.fetchall())
+    old_orders = cursor.fetchall()
+    print 'old orders'
+    print old_orders
 
     # create new order
     id = random.randint(0, 100000000)
     cursor.execute(
-        'INSERT INTO "order"(id, vol, price, ticker, isbuy, ismarket) VALUES '
-        '(%s, %s, %s, \'%s\', %s, %s, %s)' % ('DEFAULT', vol, price, ticker, isBuy, isMarket, userId)
+        'INSERT INTO "order"(id, vol, price, ticker, isbuy, ismarket, userid) VALUES '
+        '(%s, %s, %s, \'%s\', %s, %s, %s);' % (id, vol, price, ticker, isBuy, isMarket, userId)
     )
     conn.commit()
     cursor.execute(
-        'SELECT FROM "order" WHERE id = %s' % id
+        'SELECT * FROM "order" WHERE id = %s;' % id
     )
-    new_order = jsonify(cursor.fetchall())
+    new_order = cursor.fetchall()
+    print 'new order'
+    print new_order
 
     # collect past general ledger history
     cursor.execute(
-        'SELECT * FROM "ledger"'
+        'SELECT * FROM "ledger";'
     )
-    gl = jsonify(cursor.fetchall())
+    gl = cursor.fetchall()
+    print 'gl'
+    print gl
 
     # collect priority queue
     cursor.execute(
         'SELECT * FROM "priority_queue"'
     )
-    pq = jsonify(cursor.fetchall())
+    pq = cursor.fetchall()
+    print 'pq'
+    print pq
 
 
     # call an algos.py function right here
-    new_market_price, datetime_of_update = algos.getData(pq, old_orders, gl, new_order)
+    new_market_price, datetime_of_update = algos.getData(pq, old_orders, gl, new_order[0])
 
     # # update priority queue
     # cursor.execute(
@@ -180,11 +181,11 @@ def orderCallback(vol, price, ticker, isBuy, isMarket, userId):
     #
     # # update user inventory
     # if
+    #
+    # conn.commit()
 
-    conn.commit()
-
-    # return jsonify({'status': 200, 'message': 'success :)'})
-    return jsonify({'new_market_price' : new_market_price, 'date_of_update': datetime_of_update})
+    return jsonify({'status': 200, 'message': 'success :)'})
+    # return jsonify({'new_market_price' : new_market_price, 'date_of_update': datetime_of_update})
 
 
 if __name__ == '__main__':
