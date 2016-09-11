@@ -10,7 +10,11 @@
 				border: 2px solid var(--app-text-color);
 				padding: 10px;
 			}
-
+			
+			 {
+				background: transparent;
+				border: none;
+			}
 			.search-string {
 				margin: 0;
 				padding: 0;
@@ -19,8 +23,9 @@
 				color: var(--app-text-color);
 			}
 		</style>
-
-			<h5 class='search-string'>Search Stickers...</h5>
+		
+		<input value="{{query::input}}">
+		<!-- <h5 class='search-string'>Search Stickers...</h5> -->
 
 	</template>
 

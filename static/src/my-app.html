@@ -39,6 +39,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     on-response="handleResponse"
     debounce-duration="300"></iron-ajax>
 
+    <iron-ajax
+    auto
+    url="/entities/"
+    handle-as="json"
+    on-response="handleAccResponse"
+    debounce-duration="300"></iron-ajax>
     <style>
       :host {
         --app-primary-color: #171D43;
@@ -140,7 +146,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       <app-drawer>
         
         <div class="title">THE STICKER EXCHANGE</div>
-        <my-account name="John Doe" balance="207.24"></my-account>
+        <my-account name="{{name}}" balance="{{balance}}"></my-account>
 
         <div class="inventory">
           Inventory
@@ -163,7 +169,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
         <info-card name="{{sticker}}" value="0.36" increasing percentage="0.02"></info-card>
 
-        <paper-material class="chart-base" elevation="2">
+        <paper-material class="chart-base" elevation="2" id="chartBase">
           <chart-line data="{{data}}" class="chart"></chart-line>
         </paper-material> 
         
@@ -174,6 +180,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   </template>
 
   <script>
+    function interpolate(x) {
+      var x0 = 512, y0 = 15;
+      var x1 = 750, y1 = 30;
+
+      return y0 + (yi - y0)((x - x0)/(x1 - x0));
+    }
     Polymer({
       is: 'my-app',
 
@@ -190,15 +202,18 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       },
       handleResponse: function(e, xhr) {
         var rawData = xhr.response;
+
         var labels = [];
         var data = [];
-
+          
+        var width = this.$.chartBase.offsetWidth;
+        
         for (var i = 0 ; i <= 30; i++) {
           var point = rawData[i];
           var date = new Date(point[1]);
           var hour = date.getHours();
-          var minutes = date.getMinutes();
-          var seconds = date.getSeconds();
+          var minutes = date.getMinutes() > 9? date.getMinutes() : '0' + date.getMinutes();
+          var seconds = date.getSeconds() > 9? date.getSeconds() : '0' + date.getSeconds();
 
           labels.push(hour + ':' + minutes + ':' + seconds);
           data.push(point[2]);
@@ -222,7 +237,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           ]
         };
       },
+      handleAccResponse: function(e, xhr) {
+        var rawData = xhr.response;
+        var acc = rawData[0];
 
+        this.name = acc[1];
+        this.balance = acc[2];
+      }
       // ready: function() {
 
       // this.data = {
