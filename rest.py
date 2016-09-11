@@ -139,7 +139,7 @@ def orderCallback(val, price, ticker, isBuy, isMarket, userId):
     old_orders = jsonify(cursor.fetchall())
 
     # create new order
-    id = random.randint(100000)
+    id = random.randint(0, 100000000)
     cursor.execute(
         'INSERT INTO "order"(id, val, price, ticker, isBuy, isMarket) VALUES '
         '(%s, %s, %s, %s, %s, %s, %s)' % ('DEFAULT', val, price, ticker, isBuy, isMarket, userId)
