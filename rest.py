@@ -31,6 +31,7 @@ import urllib2
 import json
 
 
+
 urlparse.uses_netloc.append("postgres")
 url = urlparse.urlparse('postgres://gxspomxmufoybd:dskomEuwa9JYaxf8Jd7h8JYVKo@ec2-54-221-253-117.compute-1.amazonaws.com:5432/d62ndf8grb25cb')
 
@@ -46,6 +47,8 @@ cursor = conn.cursor()
 app = Flask(__name__, static_url_path='')
 app.json_encoder = CustomJsonEncoder
 api = Api(app)
+
+
 
 @app.route('/')
 def root():
@@ -194,24 +197,24 @@ def orderCallback(vol, price, ticker, isBuy, isMarket, userId):
 
     # update priority queue
     cursor.execute(
-        'DELETE FROM TABLE "priority_queue" *'
+        'DELETE FROM "priority_queue" *'
     )
     conn.commit()
     for order in new_pq:
         cursor.execute(
             'INSERT INTO "priority_queue"(id, stamp, orderid) VALUES '
-            '( %s, %s, %s) ' % ('DEFAULT', 'now()', order['id'])
+            '( %s, %s, %s) ' % ('DEFAULT', 'now()', order.id)
         )
 
     # update ledger
     cursor.execute(
-        'DELETE FROM GTABLE "ledger" *'
+        'DELETE FROM "ledger" *'
     )
     conn.commit()
     for l in new_ledger:
         cursor.execute(
             'INSERT INTO "ledger"(id, stamp, orderid) VALUES '
-            '( %s, %s, %s) ' % ('DEFAULT', 'now()', l['id'])
+            '( %s, %s, %s) ' % ('DEFAULT', 'now()', l.id)
         )
 
     #
