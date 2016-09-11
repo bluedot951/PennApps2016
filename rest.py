@@ -129,11 +129,8 @@ def orderCallback(vol, price, ticker, isBuy, isMarket, userId):
     cursor.execute(
         'SELECT * FROM "order"'
     )
-    a = cursor.fetchall()
-    old_orders = a
-    # print a
-    # old_orders = jsonify(**a)
-    # print 'old orders'
+    old_orders = cursor.fetchall()
+    print 'old orders'
     print old_orders
 
     # create new order
@@ -146,11 +143,7 @@ def orderCallback(vol, price, ticker, isBuy, isMarket, userId):
     cursor.execute(
         'SELECT * FROM "order" WHERE id = %s;' % id
     )
-    a = cursor.fetchall()
-    print 'a'
-    print a
-    # new_order = jsonify(**a)
-    new_order = a
+    new_order = cursor.fetchall()
     print 'new order'
     print new_order
 
@@ -158,10 +151,7 @@ def orderCallback(vol, price, ticker, isBuy, isMarket, userId):
     cursor.execute(
         'SELECT * FROM "ledger";'
     )
-    a = cursor.fetchall()
-    print 'a'
-    print a
-    gl = a
+    gl = cursor.fetchall()
     print 'gl'
     print gl
 
@@ -169,18 +159,13 @@ def orderCallback(vol, price, ticker, isBuy, isMarket, userId):
     cursor.execute(
         'SELECT * FROM "priority_queue"'
     )
-    a = cursor.fetchall()
-    print 'a'
-    print a
-    pq = a
-    # pq = jsonify(cursor.fetchall())
+    pq = cursor.fetchall()
     print 'pq'
     print pq
-    # conn.commit()
 
 
     # call an algos.py function right here
-    # new_market_price, datetime_of_update = algos.getData(pq, old_orders, gl, new_order)
+    new_market_price, datetime_of_update = algos.getData(pq, old_orders, gl, new_order)
 
     # # update priority queue
     # cursor.execute(
