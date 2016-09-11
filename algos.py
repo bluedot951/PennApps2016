@@ -4,7 +4,7 @@ import json
 import datetime
 from transfers import transfer, HTSECheckingAccount
 from time import time
-
+import urllib2
 
 nessie_key = 'b5f9af5da4a243e5e82982193e355b7f'
 response = requests.get('http://api.reimaginebanking.com/accounts/57d40aeee63c5995587e864f/customer?key={api}'.format(api =nessie_key ))
@@ -110,9 +110,6 @@ def getData(pq, all_orders, ledger, new_order):
 
     return(pqToRet, ledger)
 
-
-    return (pq, ledger)
-
     # This takes pq, order, and ledger queries from rest.py to calculate market data
     # pq ~ [ [id, timestamp, orderId], ..., ... ]
     # order ~ [id, price, volume, userId, ticker, isBuy, isMarket]
@@ -146,22 +143,55 @@ def removepqentry(myPQ, o):
 # o is of class order
 # also need to add change to general inventory & change to user account info
 def execution(buyPQ, sellPQ, ledger):
+
     for i in buyPQ[:]:
-        for j in sellPQ[:]:
-            if i.price >= j.price:
-                if i.vol > j.vol:
-                    transfer('to', '57d40d4ee63c5995587e8651', j.vol * j.price )
-                    transfer('from', HTSECheckingAccount, j.vol*j.price)
-                    i.vol -= j.vol
-                    ledger.append(j)
-                    removepqentry(sellPQ, j)
-                else:
-                    transfer('to', HTSECheckingAccount, i.vol * j.price)
-                    transfer('from' '57d40d4ee63c5995587e8651', i.vol * j.price)
-                    j.vol -= i.vol
-                    i.vol = 0
-                    ledger.append(i)
-                    removepqentry(buyPQ, i)
+        ticker = i.t
+        url = "https://pennapps2k16.herokuapp.com/price_history/" + ticker
+
+        response = urllib2.urlopen(url)
+        data = json.load(response)
+
+        marketPrice = float(data[len(data)-1][2])
+
+        if i.price >= marketPrice or i.im:
+            transfer('to', '57d40d4ee63c5995587e8651', i.vol * marketPrice)
+            transfer('from', HTSECheckingAccount, i.vol * marketPrice)
+
+            ledger.append(i)
+            removepqentry(buyPQ, i)
+
+    for i in sellPQ[:]:
+        url = "https://pennapps2k16.herokuapp.com/price_history/" + ticker
+
+        response = urllib2.urlopen(url)
+        data = json.load(response)
+
+        marketPrice = float(data[len(data)-1][2])
+
+
+        if i.price <= marketPrice or i.im:
+            transfer('to', HTSECheckingAccount, i.vol * marketPrice)
+            transfer('from' '57d40d4ee63c5995587e8651', i.vol * marketPrice)
+
+            ledger.append(i)
+            removepqentry(sellPQ, i)
+    #
+    # for i in buyPQ[:]:
+    #     for j in sellPQ[:]:
+    #         if i.price >= j.price:
+    #             if i.vol > j.vol:
+    #                 transfer('to', '57d40d4ee63c5995587e8651', j.vol * j.price )
+    #                 transfer('from', HTSECheckingAccount, j.vol*j.price)
+    #                 i.vol -= j.vol
+    #                 ledger.append(j)
+    #                 removepqentry(sellPQ, j)
+    #             else:
+    #                 transfer('to', HTSECheckingAccount, i.vol * j.price)
+    #                 transfer('from' '57d40d4ee63c5995587e8651', i.vol * j.price)
+    #                 j.vol -= i.vol
+    #                 i.vol = 0
+    #                 ledger.append(i)
+    #                 removepqentry(buyPQ, i)
 
 def addBuyOrder(o, buyPQ):
     price = o.p
