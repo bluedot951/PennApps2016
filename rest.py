@@ -155,9 +155,10 @@ def orderCallback(vol, price, ticker, isBuy, isMarket, userId):
     )
     pq = jsonify(cursor.fetchall())
 
+    return new_order
 
     # call an algos.py function right here
-    new_market_price, datetime_of_update = algos.getData(pq, old_orders, gl, new_order)
+    # new_market_price, datetime_of_update = algos.getData(pq, old_orders, gl, new_order)
 
     # # update priority queue
     # cursor.execute(
