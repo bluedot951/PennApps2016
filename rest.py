@@ -27,6 +27,8 @@ import psycopg2
 import urlparse
 from custom_json_encoder import CustomJsonEncoder
 import algos
+import urllib2
+
 
 urlparse.uses_netloc.append("postgres")
 url = urlparse.urlparse('postgres://gxspomxmufoybd:dskomEuwa9JYaxf8Jd7h8JYVKo@ec2-54-221-253-117.compute-1.amazonaws.com:5432/d62ndf8grb25cb')
@@ -43,6 +45,18 @@ cursor = conn.cursor()
 app = Flask(__name__, static_url_path='')
 app.json_encoder = CustomJsonEncoder
 api = Api(app)
+
+
+@app.route('/balance', methods=['GET'])
+def get_balance():
+    url = "http://api.reimaginebanking.com/accounts/57d40d4ee63c5995587e8651?key=3a0f0fa4ae6f43cc9f70854d69e0f78f"
+    # urllib2.urlopen(url).read()
+
+    response = urllib2.urlopen(url)
+    data = json.load(response)
+
+    return data["balance"]
+
 
 
 @app.route('/entity/', methods=['GET'])
